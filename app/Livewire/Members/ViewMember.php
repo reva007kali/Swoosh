@@ -2,16 +2,18 @@
 
 namespace App\Livewire\Members;
 
-use Livewire\Component;
 use App\Models\Member;
 use App\Models\Service;
+use BaconQrCode\Writer;
+use Livewire\Component;
 use App\Models\Transaction;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Auth;
 use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Writer;
 use Filament\Notifications\Notification;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 
 
 class ViewMember extends Component
@@ -40,11 +42,14 @@ class ViewMember extends Component
 
         // QR code generation
         $renderer = new ImageRenderer(
-            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
+            new RendererStyle(200),
             new SvgImageBackEnd()
+            // new ImagickImageBackEnd()
         );
         $writer = new Writer($renderer);
         $this->qrCodeSvg = $writer->writeString(route('members.view', $this->member->qr_code));
+        
+        
     }
 
     // ------------------- TOP UP -------------------
@@ -166,7 +171,7 @@ class ViewMember extends Component
         $this->member->refresh();
 
 
-         $this->successMessage = 'Kendaraan berhasil ditambahkan!';
+        $this->successMessage = 'Kendaraan berhasil ditambahkan!';
     }
     public function render()
     {

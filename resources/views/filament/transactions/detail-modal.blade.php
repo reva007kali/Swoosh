@@ -59,8 +59,8 @@
                             <td class="p-2">{{ $item->service?->name ?? 'Service tidak ditemukan' }}</td>
                             <td class="p-2 text-right">{{ $item->quantity }}</td>
                             <td class="p-2 text-right">Rp {{ number_format($item->price, 0, ',', '.') }}</td>
-                            <td class="p-2 text-right">Rp {{ number_format($item->discount ?? 0, 0, ',', '.') }}</td>
-                            <td class="p-2 text-right">Rp {{ number_format($item->tax ?? 0, 0, ',', '.') }}</td>
+                            <td class="p-2 text-right">Rp {{ number_format($transaction->discount,0, ',', ',') }}</td>
+                            <td class="p-2 text-right">Rp {{ number_format($transaction->tax ?? 0, 0, ',', '.') }}</td>
                             <td class="p-2 text-right font-semibold">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>
                         </tr>
                     @endforeach
@@ -71,8 +71,8 @@
         <!-- Ringkasan Transaksi -->
         <div class="mt-4 flex flex-col md:flex-row justify-end gap-4 text-sm md:text-base font-medium">
             <div class="bg-gray-100 dark:bg-gray-700 px-3 py-2 rounded">Total Item: Rp {{ number_format($transaction->items->sum('subtotal'), 0, ',', '.') }}</div>
-            <div class="bg-yellow-200 dark:bg-yellow-600 px-3 py-2 rounded">Total Diskon: Rp {{ number_format($transaction->items->sum('discount'), 0, ',', '.') }}</div>
-            <div class="bg-blue-200 dark:bg-blue-600 px-3 py-2 rounded">Total Pajak: Rp {{ number_format($transaction->items->sum('tax'), 0, ',', '.') }}</div>
+            <div class="bg-yellow-200 dark:bg-yellow-600 px-3 py-2 rounded">Total Diskon: Rp {{ number_format($transaction->discount, 0, ',', '.') }}</div>
+            <div class="bg-blue-200 dark:bg-blue-600 px-3 py-2 rounded">Total Pajak: Rp {{ number_format($transaction->tax, 0, ',', '.') }}</div>
             <div class="bg-green-200 dark:bg-green-600 px-3 py-2 rounded font-bold">Grand Total: Rp {{ number_format($transaction->grand_total, 0, ',', '.') }}</div>
         </div>
     </div>

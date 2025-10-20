@@ -1,23 +1,41 @@
 <div
     class="space-y-8 p-4 md:p-8 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
+    {{-- member card --}}
+    <div class="lg:flex space-y-5 gap-6">
+        <div class="w-[350px] relative overflow-hidden">
+            <img class="rounded-xl w-full object-cover" src="/image/membercardfront.png" alt="">
+            <div class="absolute top-14 left-6 z-3">
+                <h1 class="text-white font-bold">{{ $member->name }}</h1>
+                <h1 class="text-white text-xs">{{ $member->email }}<br>{{ $member->phone }}</h1>
+            </div>
+        </div>
+        <div class="w-[350px] relative overflow-hidden">
+            <img class="rounded-xl w-full object-cover" src="/image/Membercard.png" alt="">
+            <div class="w-24 h-24 absolute top-14 left-[30px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
+                {!! $qrCodeSvg !!}
+            </div>
+        </div>
+    </div>
+    {{-- member card --}}
+
     <!-- Profil Member -->
     <div
         class="flex flex-col md:flex-row gap-6 items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
         <img src="{{ $this->member->user && $this->member->user->image ? asset('storage/' . $this->member->user->image) : asset('image/user.png') }}"
-            alt="Member Photo" class="w-28 h-28 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600">
+            alt="Member Photo"
+            class="w-28 h-28 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600">
 
         <div class="flex-1">
             <h2 class="text-3xl font-bold mb-1">{{ $member->name }}</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ $member->email }} | {{ $member->phone }}</p>
             <p class="text-md font-medium">Saldo: <span class="text-green-500">Rp
-                    {{ number_format($member->balance, 0, ',', '.') }}</span>  |   Point: <span
+                    {{ number_format($member->balance, 0, ',', '.') }}</span> | Point: <span
                     class="text-yellow-400">{{ $member->member_point }}</span></p>
         </div>
 
-        <div class="text-center">
-            <h3 class="font-semibold mb-2">QR Code</h3>
-            <div class="inline-block p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+        <div class="flex flex-col items-center space-y-4">
+            <div class="w-30 h-30 bg-white rounded-lg flex items-center justify-center">
                 {!! $qrCodeSvg !!}
             </div>
         </div>

@@ -9,6 +9,7 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Members\ViewMember;
 use App\Livewire\Settings\TwoFactor;
 use App\Livewire\Members\EditProfile;
+use App\Http\Controllers\MemberCardController;
 use App\Livewire\Members\ListMembers;
 use App\Livewire\Settings\Appearance;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/member-card/{member}/download', [MemberCardController::class, 'download'])->name('member.card.download');
+
+
     Route::get('/manage-users', ListUsers::class)->name('users.index');
     Route::get('/manage-services', ListServices::class)->name('services.index');
 
