@@ -13,27 +13,51 @@ class ServiceSeeder extends Seeder
      */
     public function run(): void
     {
-         $services = [
+        $services = [
+            // Mobil
             [
-                'name' => 'Cuci Mobil Reguler',
-                'description' => 'Pencucian standar untuk mobil ukuran kecil hingga sedang.',
-                'price' => 35000,
-                'duration' => '30 menit',
-                'category' => 'car',
+                'category' => 'Mobil',
+                'name' => 'Express Robotic',
+                'price' => 65000,
+                'description' => 'Exterior + Semir Ban',
             ],
             [
-                'name' => 'Cuci Motor Cepat',
-                'description' => 'Pencucian cepat untuk sepeda motor.',
-                'price' => 15000,
-                'duration' => '15 menit',
-                'category' => 'motorcycle',
+                'category' => 'Mobil',
+                'name' => 'Reguler Robotic',
+                'price' => 70000,
+                'description' => 'Express Robotic + Vacuum + Semir Ban',
             ],
             [
-                'name' => 'Wax & Polish',
-                'description' => 'Perawatan eksterior dengan waxing dan pemolesan.',
+                'category' => 'Mobil',
+                'name' => 'Reguler Hydraulic',
                 'price' => 80000,
-                'duration' => '1 jam',
-                'category' => 'car',
+                'description' => 'Exterior + Vacuum + Semir Ban',
+            ],
+            [
+                'category' => 'Mobil',
+                'name' => 'Premium Hydraulic',
+                'price' => 115000,
+                'description' => 'Exterior + Vacuum + Wax + Semir Ban',
+            ],
+
+            // Motor
+            [
+                'category' => 'Motor',
+                'name' => 'Reguler Wash',
+                'price' => 35000,
+                'description' => 'Shampo + Semir Ban',
+            ],
+            [
+                'category' => 'Motor',
+                'name' => 'Premium Wash',
+                'price' => 45000,
+                'description' => 'Shampo + Semir Ban + Wax',
+            ],
+            [
+                'category' => 'Motor',
+                'name' => 'Luxury Motor',
+                'price' => 100000,
+                'description' => 'Shampo + Semir Ban + Wax',
             ],
         ];
 
