@@ -14,49 +14,51 @@
         </a>
 
         <flux:navlist variant="outline">
+    {{-- tampilkan menu platform hanya kalau user bukan member --}}
+    @if (auth()->user()->role->name !== 'member')
+        <flux:navlist.group :heading="__('Platform')" class="grid">
+            <flux:navlist.item icon="home" :href="route('dashboard')"
+                :current="request()->routeIs('dashboard')" wire:navigate>
+                {{ __('Dashboard') }}
+            </flux:navlist.item>
 
-            <flux:navlist.group :heading="__('Platform')" class="grid">
+            <flux:navlist.item icon="circle-stack" :href="route('transactions.index')"
+                :current="request()->routeIs('transactions.index')" wire:navigate>
+                {{ __('Transaksi') }}
+            </flux:navlist.item>
+        </flux:navlist.group>
 
-                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>{{ __('Dashboard') }}
-                </flux:navlist.item>
+        <flux:navlist.group :heading="__('Management')" class="grid">
+            <flux:navlist.item icon="users" :href="route('members.index')"
+                :current="request()->routeIs('members.index')" wire:navigate>
+                {{ __('Member') }}
+            </flux:navlist.item>
 
-                <flux:navlist.item icon="circle-stack" :href="route('transactions.index')"
-                    :current="request()->routeIs('transactions.index')" wire:navigate>{{ __('Transaksi') }}
-                </flux:navlist.item>
+            <flux:navlist.item icon="wrench-screwdriver" :href="route('services.index')"
+                :current="request()->routeIs('services.index')" wire:navigate>
+                {{ __('Services') }}
+            </flux:navlist.item>
 
-            </flux:navlist.group>
+            <flux:navlist.item icon="wrench-screwdriver" :href="route('transaction.items.index')"
+                :current="request()->routeIs('transaction.items.index')" wire:navigate>
+                {{ __('Transaksi Per Item') }}
+            </flux:navlist.item>
 
-            <flux:navlist.group :heading="__('Management')" class="grid">
+            <flux:navlist.item icon="truck" :href="route('vehicles.index')"
+                :current="request()->routeIs('vehicles.index')" wire:navigate>
+                {{ __('List Kendaraan') }}
+            </flux:navlist.item>
+        </flux:navlist.group>
 
-                <flux:navlist.item icon="users" :href="route('members.index')"
-                    :current="request()->routeIs('members.index')" wire:navigate>{{ __('Member') }}
-                </flux:navlist.item>
+        <flux:navlist.group :heading="__('Users Management')" class="grid">
+            <flux:navlist.item icon="users" :href="route('users.index')"
+                :current="request()->routeIs('users.index')" wire:navigate>
+                {{ __('Manage User') }}
+            </flux:navlist.item>
+        </flux:navlist.group>
+    @endif
+</flux:navlist>
 
-                <flux:navlist.item icon="wrench-screwdriver" :href="route('services.index')"
-                    :current="request()->routeIs('services.index')" wire:navigate>{{ __('Services') }}
-                </flux:navlist.item>
-                
-                <flux:navlist.item icon="wrench-screwdriver" :href="route('transaction.items.index')"
-                    :current="request()->routeIs('transaction.items.index')" wire:navigate>{{ __('Transaksi Per Item') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="truck" :href="route('vehicles.index')"
-                    :current="request()->routeIs('vehicles.index')" wire:navigate>{{ __('List Kendaraan') }}
-                </flux:navlist.item>
-
-            </flux:navlist.group>
-
-
-            <flux:navlist.group :heading="__('Users Mangement')" class="grid">
-
-                <flux:navlist.item icon="users" :href="route('users.index')"
-                    :current="request()->routeIs('users.index')" wire:navigate>{{ __('Manage User') }}
-                </flux:navlist.item>
-
-               
-            </flux:navlist.group>
-        </flux:navlist>
 
         <flux:spacer />
 

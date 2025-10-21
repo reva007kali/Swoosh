@@ -3,6 +3,7 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
+use Filament\Actions\DeleteAction;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
@@ -91,6 +92,8 @@ class ListUsers extends Component implements HasActions, HasSchemas, HasTable
                             ->helperText('Kosongkan jika tidak ingin mengubah password')
                             ->required(fn($context) => $context === 'create'), // hanya required saat create
                     ]),
+
+                    DeleteAction::make('delete')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

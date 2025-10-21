@@ -8,7 +8,6 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use App\Livewire\Members\ViewMember;
 use App\Livewire\Settings\TwoFactor;
-use App\Livewire\Members\EditProfile;
 use App\Http\Controllers\MemberCardController;
 use App\Livewire\Members\ListMembers;
 use App\Livewire\Settings\Appearance;

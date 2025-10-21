@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Members;
 
+use Filament\Actions\DeleteAction;
 use Schema;
 use App\Models\Member;
 use Livewire\Component;
@@ -39,11 +40,11 @@ class ListMembers extends Component implements HasActions, HasSchemas, HasTable
             ->query(fn(): Builder => Member::query())
             ->heading('List Member')
             ->columns([
-                ImageColumn::make('user.image_url')
-                    ->label('Profile Pict')
-                    ->circular()
-                    ->height(40)
-                    ->width(40),
+                // ImageColumn::make('user.image_url')
+                //     ->label('Profile Pict')
+                //     ->circular()
+                //     ->height(40)
+                //     ->width(40),
                 TextColumn::make('name')
                     ->label('Nama Member')
                     ->searchable(),
@@ -132,7 +133,11 @@ class ListMembers extends Component implements HasActions, HasSchemas, HasTable
                 ViewAction::make()
                     ->label('Lihat')
                     ->icon('heroicon-o-eye')
-                    ->url(fn($record) => route('members.view', $record->qr_code))
+                    ->url(fn($record) => route('members.view', $record->qr_code)),
+
+                // DeleteAction::make('delete')
+
+
 
             ])
             ->toolbarActions([

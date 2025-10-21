@@ -31,7 +31,7 @@ class Register extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'unique:users,phone'],
+            'phone' => ['required', 'string', 'regex:/^[0-9]+$/', 'unique:users,phone'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -61,6 +61,18 @@ class Register extends Component
         Auth::login($user);
 
         Session::regenerate();
+
+        // Cari profil member yang barusan dibuat
+        $member = Member::where('user_id', $user->id)->first();
+
+        // Kalau user adalah member, arahkan ke profil mereka
+        if ($user->role?->name === 'member' && $member) {
+            $this->redirect(
+                route('members.view', ['qr_code' => $member->qr_code]),
+                navigate: true
+            );
+            return;
+        }
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }

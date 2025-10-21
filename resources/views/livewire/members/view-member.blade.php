@@ -12,7 +12,8 @@
         </div>
         <div class="w-[350px] relative overflow-hidden">
             <img class="rounded-xl w-full object-cover" src="/image/Membercard.png" alt="">
-            <div class="w-24 h-24 absolute top-14 left-[30px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
+            <div
+                class="w-24 h-24 absolute top-14 left-[30px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
                 {!! $qrCodeSvg !!}
             </div>
         </div>
@@ -76,130 +77,134 @@
 
 
     <!-- Top Up -->
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
-        <h3 class="font-bold text-xl mb-4">Top Up Saldo</h3>
-        <form wire:submit.prevent="topUp" class="flex flex-col md:flex-row gap-3">
-            <input type="number" wire:model="amount" placeholder="Jumlah top up"
-                class="border p-2 rounded w-full md:w-1/3 dark:bg-gray-700 dark:border-gray-600">
-            <button type="submit"
-                class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors duration-200">Top
-                Up</button>
-        </form>
-    </div>
+   @if (auth()->user()->role->name !== 'member')
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
+            <h3 class="font-bold text-xl mb-4">Top Up Saldo</h3>
+            <form wire:submit.prevent="topUp" class="flex flex-col md:flex-row gap-3">
+                <input type="number" wire:model="amount" placeholder="Jumlah top up"
+                    class="border p-2 rounded w-full md:w-1/3 dark:bg-gray-700 dark:border-gray-600">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors duration-200">Top
+                    Up</button>
+            </form>
+        </div>
+    @endif
 
     <!-- Transaksi -->
-    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
-        <h3 class="font-bold text-xl mb-4">Transaksi</h3>
-        <form wire:submit.prevent="makeTransaction" class="flex flex-col gap-3">
-            <div class="flex flex-col md:flex-row gap-4 flex-wrap">
+    @if (auth()->user()->role->name !== 'member')
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
+            <h3 class="font-bold text-xl mb-4">Transaksi</h3>
+            <form wire:submit.prevent="makeTransaction" class="flex flex-col gap-3">
+                <div class="flex flex-col md:flex-row gap-4 flex-wrap">
 
-                <!-- Service -->
-                <div class="flex flex-col flex-1">
-                    <label class="mb-1 font-medium">Layanan</label>
-                    <select wire:model="service_id" class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
-                        <option value="">Pilih layanan</option>
-                        @foreach ($services as $service)
-                            <option value="{{ $service->id }}">{{ $service->name }} - Rp
-                                {{ number_format($service->price, 0, ',', '.') }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Vehicle -->
-                <div class="flex flex-col flex-1">
-                    <label class="mb-1 font-medium">Kendaraan</label>
-                    <div class="flex gap-2">
-                        <select wire:model="vehicle_id"
-                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 flex-1">
-                            <option value="">Pilih kendaraan</option>
-                            @foreach ($member->vehicles as $vehicle)
-                                <option value="{{ $vehicle->id }}">{{ $vehicle->name }} |
-                                    {{ $vehicle->plate_number }}</option>
+                    <!-- Service -->
+                    <div class="flex flex-col flex-1">
+                        <label class="mb-1 font-medium">Layanan</label>
+                        <select wire:model="service_id"
+                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                            <option value="">Pilih layanan</option>
+                            @foreach ($services as $service)
+                                <option value="{{ $service->id }}">{{ $service->name }} - Rp
+                                    {{ number_format($service->price, 0, ',', '.') }}</option>
                             @endforeach
                         </select>
-
-                        <!-- Tombol tambah kendaraan -->
-                        <button wire:click="$toggle('showAddVehicle')"
-                            class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition">
-                            + Tambah
-                        </button>
-
                     </div>
-                </div>
 
-                <!-- Modal Livewire -->
+                    <!-- Vehicle -->
+                    <div class="flex flex-col flex-1">
+                        <label class="mb-1 font-medium">Kendaraan</label>
+                        <div class="flex gap-2">
+                            <select wire:model="vehicle_id"
+                                class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 flex-1">
+                                <option value="">Pilih kendaraan</option>
+                                @foreach ($member->vehicles as $vehicle)
+                                    <option value="{{ $vehicle->id }}">{{ $vehicle->name }} |
+                                        {{ $vehicle->plate_number }}</option>
+                                @endforeach
+                            </select>
 
-                @if ($showAddVehicle)
-                    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg">
-                            <h3 class="text-lg font-bold mb-4">Tambah Kendaraan</h3>
+                            <!-- Tombol tambah kendaraan -->
+                            <button wire:click="$toggle('showAddVehicle')"
+                                class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 transition">
+                                + Tambah
+                            </button>
 
-                            <div class="space-y-3">
-                                <input type="text" wire:model.defer="newVehicle.plate_number"
-                                    placeholder="Nomor Polisi"
-                                    class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
-                                <input type="text" wire:model.defer="newVehicle.type" placeholder="Tipe"
-                                    class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
-                                <input type="text" wire:model.defer="newVehicle.color" placeholder="Warna"
-                                    class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
-                            </div>
-
-                            <div class="mt-4 flex justify-end gap-2">
-                                <button wire:click="$set('showAddVehicle', false)"
-                                    class="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded">Batal</button>
-                                <button wire:click="addVehicle"
-                                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Simpan</button>
-                            </div>
                         </div>
                     </div>
-                @endif
+
+                    <!-- Modal Livewire -->
+
+                    @if ($showAddVehicle)
+                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg">
+                                <h3 class="text-lg font-bold mb-4">Tambah Kendaraan</h3>
+
+                                <div class="space-y-3">
+                                    <input type="text" wire:model.defer="newVehicle.plate_number"
+                                        placeholder="Nomor Polisi"
+                                        class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                                    <input type="text" wire:model.defer="newVehicle.type" placeholder="Tipe"
+                                        class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                                    <input type="text" wire:model.defer="newVehicle.color" placeholder="Warna"
+                                        class="w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+
+                                <div class="mt-4 flex justify-end gap-2">
+                                    <button wire:click="$set('showAddVehicle', false)"
+                                        class="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded">Batal</button>
+                                    <button wire:click="addVehicle"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
 
-                <!-- Quantity -->
-                <div class="flex flex-col w-24">
-                    <label class="mb-1 font-medium">Qty</label>
-                    <input type="number" wire:model="quantity" min="1"
-                        class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Jumlah">
+                    <!-- Quantity -->
+                    <div class="flex flex-col w-24">
+                        <label class="mb-1 font-medium">Qty</label>
+                        <input type="number" wire:model="quantity" min="1"
+                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Jumlah">
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="flex flex-col w-36">
+                        <label class="mb-1 font-medium">Payment</label>
+                        <select wire:model="payment_method_id"
+                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
+                            <option value="">Pilih Payment</option>
+                            @foreach ($paymentMethods as $pm)
+                                <option value="{{ $pm->id }}">{{ $pm->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Discount -->
+                    <div class="flex flex-col w-28">
+                        <label class="mb-1 font-medium">Diskon</label>
+                        <input type="number" wire:model="discount" min="0"
+                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Rp">
+                    </div>
+
+                    <!-- Tax -->
+                    <div class="flex flex-col w-28">
+                        <label class="mb-1 font-medium">Pajak</label>
+                        <input type="number" wire:model="tax" min="0"
+                            class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Rp">
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="flex flex-col justify-end">
+                        <button type="submit"
+                            class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200">
+                            Bayar
+                        </button>
+                    </div>
+
                 </div>
-
-                <!-- Payment Method -->
-                <div class="flex flex-col w-36">
-                    <label class="mb-1 font-medium">Payment</label>
-                    <select wire:model="payment_method_id"
-                        class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600">
-                        <option value="">Pilih Payment</option>
-                        @foreach ($paymentMethods as $pm)
-                            <option value="{{ $pm->id }}">{{ $pm->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Discount -->
-                <div class="flex flex-col w-28">
-                    <label class="mb-1 font-medium">Diskon</label>
-                    <input type="number" wire:model="discount" min="0"
-                        class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Rp">
-                </div>
-
-                <!-- Tax -->
-                <div class="flex flex-col w-28">
-                    <label class="mb-1 font-medium">Pajak</label>
-                    <input type="number" wire:model="tax" min="0"
-                        class="border p-2 rounded dark:bg-gray-700 dark:border-gray-600" placeholder="Rp">
-                </div>
-
-                <!-- Submit -->
-                <div class="flex flex-col justify-end">
-                    <button type="submit"
-                        class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white px-4 py-2 rounded transition-colors duration-200">
-                        Bayar
-                    </button>
-                </div>
-
-            </div>
-        </form>
-    </div>
-
+            </form>
+        </div>
+    @endif
 
     <!-- 5 Transaksi Terakhir -->
     <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300 overflow-x-auto">
