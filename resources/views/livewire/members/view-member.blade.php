@@ -1,31 +1,12 @@
 <div
     class="space-y-8 p-4 md:p-8 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
-    {{-- member card --}}
-    <div class="lg:flex space-y-5 gap-6">
-        <div class="w-[350px] relative overflow-hidden">
-            <img class="rounded-xl w-full object-cover" src="/image/membercardfront.png" alt="">
-            <div class="absolute top-14 left-6 z-3">
-                <h1 class="text-white font-bold">{{ $member->name }}</h1>
-                <h1 class="text-white text-xs">{{ $member->email }}<br>{{ $member->phone }}</h1>
-            </div>
-        </div>
-        <div class="w-[350px] relative overflow-hidden">
-            <img class="rounded-xl w-full object-cover" src="/image/Membercard.png" alt="">
-            <div
-                class="w-24 h-24 absolute top-14 left-[30px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
-                {!! $qrCodeSvg !!}
-            </div>
-        </div>
-    </div>
-    {{-- member card --}}
 
     <!-- Profil Member -->
     <div
         class="flex flex-col md:flex-row gap-6 items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
         <img src="{{ $this->member->user && $this->member->user->image ? asset('storage/' . $this->member->user->image) : asset('image/user.png') }}"
-            alt="Member Photo"
-            class="w-28 h-28 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600">
+            alt="Member Photo" class="w-28 h-28 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600">
 
         <div class="flex-1">
             <h2 class="text-3xl font-bold mb-1">{{ $member->name }}</h2>
@@ -41,6 +22,123 @@
             </div>
         </div>
     </div>
+
+
+    <div x-data="{ open: false }" class="relative">
+        {{-- Tombol untuk buka modal --}}
+        <button @click="open = true"
+            class="mt-5 px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition">
+            Lihat & Cetak Kartu
+        </button>
+
+        {{-- Modal Fullscreen --}}
+        <div x-show="open" x-transition
+            class="fixed inset-0 bg-white/90 flex items-center justify-center z-50 print:bg-white print:static print:flex print:items-center print:justify-center">
+            {{-- Tombol Close (tidak tampil saat print) --}}
+            <button @click="open = false"
+                class="absolute top-5 right-5 font-extrabold text-black text-xl hover:text-gray-300 transition print:hidden">
+                ✕
+            </button>
+
+            {{-- Tombol Print --}}
+            <button onclick="window.print()"
+                class="absolute top-5 left-5 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition print:hidden">
+                Print / Save
+            </button>
+
+            {{-- Kartu Member --}}
+            <div class="printable scale-[2] lg:scale-[2.3] transform origin-center">
+                <div class="memberCard w-[300px] relative overflow-hidden">
+                    <img class="rounded-xl w-full object-cover" src="/image/kartumember.png" alt="">
+                    <div class="absolute top-9 right-3 z-3 text-right">
+                        <h1 class="text-yellow-500">{{ $member->name }}</h1>
+                        @if ($member->vehicles->isNotEmpty())
+                            <h1 class="text-yellow-500 text-sm">
+                                {{ $member->vehicles->first()->plate_number }}
+                            </h1>
+                        @endif
+                    </div>
+                    <div
+                        class="w-17 h-17 absolute bottom-11 left-[20px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
+                        {!! $qrCodeSvg !!}
+                    </div>
+                    <div class="text-[8px] text-white absolute bottom-4 left-[36px]">
+                        {{ $member->created_at->format('d/m/y') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Style khusus print --}}
+    <style>
+        @media print {
+
+            /* Sembunyikan semua elemen kecuali kartu */
+            body * {
+                visibility: hidden !important;
+            }
+
+            .printable,
+            .printable * {
+                visibility: visible !important;
+            }
+
+            /* Atur posisi kartu di tengah halaman */
+            .printable {
+                position: absolute !important;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) !important;
+                scale: 1 !important;
+            }
+
+            .printable .memberCard {
+                margin-top: 0rem;
+                scale: 2;
+            }
+
+
+            /* Pastikan gambar tidak pecah di tengah halaman */
+            .printable img {
+                page-break-inside: avoid;
+                width: 100%;
+                height: auto;
+            }
+
+            /* Hilangkan margin printer */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+    </style>
+
+
+
+
+    {{-- member card --}}
+    <div class="lg:flex space-y-5 gap-6">
+        <div class="w-[300px] relative overflow-hidden">
+            <img class="rounded-xl w-full object-cover" src="/image/kartumember.png" alt="">
+            <div class="absolute top-9 right-3 z-3 text-right">
+                <h1 class="text-yellow-500">{{ $member->name }}</h1>
+                @if ($member->vehicles->isNotEmpty())
+                    <h1 class="text-yellow-500 text-sm">
+                        {{ $member->vehicles->first()->plate_number }}
+                    </h1>
+                @endif
+            </div>
+            <div
+                class="w-17 h-17 absolute bottom-11 left-[20px] bg-white  rounded-lg overflow-hidden flex items-center justify-center">
+                {!! $qrCodeSvg !!}
+            </div>
+            <div class="text-[8px] absolute bottom-4 left-[36px]">
+                {{ $member->created_at->format('d/m/y') }}
+            </div>
+        </div>
+    </div>
+    {{-- member card --}}
 
     <!-- Kendaraan -->
     <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
@@ -77,7 +175,7 @@
 
 
     <!-- Top Up -->
-   @if (auth()->user()->role->name !== 'member')
+    @if (auth()->user()->role->name !== 'member')
         <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
             <h3 class="font-bold text-xl mb-4">Top Up Saldo</h3>
             <form wire:submit.prevent="topUp" class="flex flex-col md:flex-row gap-3">
