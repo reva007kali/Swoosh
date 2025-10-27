@@ -1,9 +1,9 @@
 <div class="space-y-6">
 
-    <video class="rounded-lg size-[300px] object-cover" id="preview" ></video>
-    <div id="qr-result">Hasil QR code: -</div>
-
-
+    <flux:navlist.item icon="qr-code" :href="route('scan.member')" :current="request()->routeIs('scan.member')"
+        wire:navigate class="!bg-blue-500 !text-white hover:!bg-blue-600 !mb-10 !w-fit !rounded-full">
+        {{ __('Scan Member Card') }}
+    </flux:navlist.item>
     <!-- Mini Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div
@@ -134,23 +134,3 @@
     </div>
 
 </div>
-<script type="text/javascript">
-  let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-
-  scanner.addListener('scan', function (content) {
-      console.log('QR Code detected:', content);
-      
-      // Langsung redirect ke URL yang terdeteksi
-      window.location.href = content;
-  });
-
-  Instascan.Camera.getCameras().then(function (cameras) {
-      if (cameras.length > 0) {
-          scanner.start(cameras[0]); // pakai kamera pertama
-      } else {
-          console.error('No cameras found.');
-      }
-  }).catch(function (e) {
-      console.error(e);
-  });
-</script>

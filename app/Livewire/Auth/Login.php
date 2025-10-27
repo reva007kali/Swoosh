@@ -3,16 +3,17 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Session;
+use App\Models\Member;
+use Livewire\Component;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Features;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 
 #[Layout('components.layouts.auth')]
 class Login extends Component
@@ -52,6 +53,20 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
+        // cek role user
+        // Cari profil member yang barusan dibuat
+        $member = Member::where('user_id', $user->id)->first();
+
+        // Kalau user adalah member, arahkan ke profil mereka
+        if ($user->role?->name === 'member' && $member) {
+            $this->redirect(
+                route('members.view', ['qr_code' => $member->qr_code]),
+                navigate: true
+            );
+            return;
+        }
+
+        // kalau bukan member (misal admin, cashier, dll)
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }
 
@@ -62,7 +77,7 @@ class Login extends Component
     {
         $user = Auth::getProvider()->retrieveByCredentials(['email' => $this->email, 'password' => $this->password]);
 
-        if (! $user || ! Auth::getProvider()->validateCredentials($user, ['password' => $this->password])) {
+        if (!$user || !Auth::getProvider()->validateCredentials($user, ['password' => $this->password])) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -78,7 +93,7 @@ class Login extends Component
      */
     protected function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -99,6 +114,6 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

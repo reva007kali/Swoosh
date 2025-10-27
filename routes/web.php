@@ -1,28 +1,29 @@
 <?php
 
-use App\Livewire\TransactionItems\ListTransactionItems;
 use Laravel\Fortify\Features;
+use App\Livewire\ScanMemberCard;
 use App\Livewire\Roles\ListRoles;
 use App\Livewire\Users\ListUsers;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\Password;
 use App\Livewire\Members\ViewMember;
 use App\Livewire\Settings\TwoFactor;
-use App\Http\Controllers\MemberCardController;
 use App\Livewire\Members\ListMembers;
 use App\Livewire\Settings\Appearance;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Services\ListServices;
 use App\Livewire\Vehicles\ListVehicles;
+use App\Http\Controllers\MemberCardController;
 use App\Livewire\Transactions\ListTransactions;
 use App\Livewire\PaymentMethods\ListPaymentMethods;
+use App\Livewire\TransactionItems\ListTransactionItems;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'role:admin,cashier'])
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
@@ -44,24 +45,26 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 });
 
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/member-card/{member}/download', [MemberCardController::class, 'download'])->name('member.card.download');
-
-
+Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     Route::get('/manage-users', ListUsers::class)->name('users.index');
     Route::get('/manage-services', ListServices::class)->name('services.index');
-
     Route::get('/manage-members', ListMembers::class)->name('members.index');
-    Route::get('/members/{qr_code}', ViewMember::class)
-        ->name('members.view');
-
-
     Route::get('/manage-roles', ListRoles::class)->name('roles.index');
     Route::get('/manage-payment-methods', ListPaymentMethods::class)->name('payment.methods.index');
     Route::get('/manage-transactions', ListTransactions::class)->name('transactions.index');
     Route::get('/manage-transaction-items', ListTransactionItems::class)->name('transaction.items.index');
     Route::get('/manage-vehicles', ListVehicles::class)->name('vehicles.index');
+});
+
+
+Route::middleware(['auth', 'role:admin,cashier,member'])->group(function () {
+    
+    Route::get('/scan-member-card', ScanMemberCard::class)->name('scan.member');
+
+    Route::get('/member-card/{member}/download', [MemberCardController::class, 'download'])->name('member.card.download');
+
+    Route::get('/members/{qr_code}', ViewMember::class)
+        ->name('members.view');
 });
 
 require __DIR__ . '/auth.php';

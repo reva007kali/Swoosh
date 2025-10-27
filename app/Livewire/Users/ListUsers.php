@@ -3,11 +3,12 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Filament\Actions\DeleteAction;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Form;
@@ -54,6 +55,7 @@ class ListUsers extends Component implements HasActions, HasSchemas, HasTable
             ])
             ->recordActions([
                 EditAction::make()
+                    ->visible(fn() => Auth::user()?->role?->name === 'admin')
                     ->schema([
                         TextInput::make('name')
                             ->label('Nama')
@@ -93,7 +95,8 @@ class ListUsers extends Component implements HasActions, HasSchemas, HasTable
                             ->required(fn($context) => $context === 'create'), // hanya required saat create
                     ]),
 
-                    DeleteAction::make('delete')
+                DeleteAction::make('delete')
+                    ->visible(fn() => Auth::user()?->role?->name === 'admin')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
