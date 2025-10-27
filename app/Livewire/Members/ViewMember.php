@@ -2,14 +2,17 @@
 
 namespace App\Livewire\Members;
 
+use App\Models\TopUp;
 use App\Models\Member;
 use App\Models\Service;
 use BaconQrCode\Writer;
 use Livewire\Component;
 use App\Models\Transaction;
 use App\Models\PaymentMethod;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use BaconQrCode\Renderer\ImageRenderer;
+use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
@@ -18,7 +21,9 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 
 class ViewMember extends Component
 {
+    use WithFileUploads;
     public $member;
+    public $photo;
     public $amount; // top up
     public $service_id;
     public $vehicle_id;
@@ -48,9 +53,36 @@ class ViewMember extends Component
         );
         $writer = new Writer($renderer);
         $this->qrCodeSvg = $writer->writeString(route('members.view', $this->member->qr_code));
-        
-        
+
+
     }
+
+
+    public function updatedPhoto()
+    {
+        // Validasi ukuran & tipe
+        $this->validate([
+            'photo' => 'image|max:2048', // Maksimal 2MB
+        ]);
+
+        // Hapus foto lama jika ada
+        if ($this->member->user && $this->member->user->image) {
+            Storage::disk('public')->delete($this->member->user->image);
+        }
+
+        // Simpan foto baru
+        $path = $this->photo->store('profile', 'public');
+
+        // Update di database
+        $this->member->user->update(['image' => $path]);
+
+        // Refresh data
+        $this->member->refresh();
+
+        // Notifikasi singkat
+        session()->flash('message', 'Foto profil berhasil diperbarui!');
+    }
+
 
     // ------------------- TOP UP -------------------
     public function topUp()
@@ -59,12 +91,25 @@ class ViewMember extends Component
             'amount' => 'required|numeric|min:1000',
         ]);
 
-        $this->member->balance += $this->amount;
-        $this->member->save();
+        $amount = $this->amount; // simpan dulu ke variabel lokal
 
+        // Tambahkan saldo ke member
+        $this->member->increment('balance', $this->amount);
+
+        // Simpan riwayat top-up ke database
+        TopUp::create([
+            'member_id' => $this->member->id,
+            'user_id' => auth()->id(), // siapa yang melakukan top up
+            'amount' => $this->amount,
+        ]);
+
+        // Reset input agar kosong setelah top-up
+        $this->reset('amount');
+
+        // Kirim notifikasi sukses
         Notification::make()
             ->title('Top Up Berhasil')
-            ->body('Saldo berhasil ditambahkan: Rp ' . number_format($this->amount, 0, ',', '.'))
+            ->body('Saldo berhasil ditambahkan: Rp ' . number_format($amount, 0, ',', '.'))
             ->success()
             ->send();
     }
@@ -175,6 +220,10 @@ class ViewMember extends Component
     }
     public function render()
     {
+        $topUps = TopUp::where('member_id', $this->member->id)
+            ->latest()
+            ->take(10)
+            ->get();
         $services = Service::all();
         $paymentMethods = PaymentMethod::all();
         $latestTransactions = $this->member->transactions()->latest()->take(5)->with('items.service', 'vehicle')->get();
@@ -182,7 +231,8 @@ class ViewMember extends Component
         return view('livewire.members.view-member', compact(
             'services',
             'paymentMethods',
-            'latestTransactions'
+            'latestTransactions',
+            'topUps'
         ));
     }
 }

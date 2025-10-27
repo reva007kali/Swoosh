@@ -3,25 +3,72 @@
 
 
     <!-- Profil Member -->
+
     <div
         class="flex flex-col md:flex-row gap-6 items-center p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
-        <img src="{{ $this->member->user && $this->member->user->image ? asset('storage/' . $this->member->user->image) : asset('image/user.png') }}"
-            alt="Member Photo" class="w-28 h-28 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600">
 
+        {{-- Upload Foto Profil --}}
+        <form wire:submit.prevent="save" enctype="multipart/form-data" class="flex flex-col items-center space-y-3">
+
+            {{-- Foto profil --}}
+            <div class="relative">
+                <img src="{{ $photo ? $photo->temporaryUrl() : ($member->user && $member->user->image ? asset('storage/' . $member->user->image) : asset('image/user.png')) }}"
+                    class="w-32 h-32 object-cover rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-sm">
+
+                {{-- Tombol kamera --}}
+                <button type="button"
+                    class="absolute bottom-1 right-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-md transition"
+                    onclick="document.getElementById('photo').click()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 7h2l1-2h12l1 2h2a1 1 0 011 1v11a1 1 0 01-1 1H3a1 1 0 01-1-1V8a1 1 0 011-1z" />
+                        <circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="2"
+                            fill="none" />
+                    </svg>
+                </button>
+
+                {{-- Input tersembunyi --}}
+                <input type="file" id="photo" wire:model="photo" accept="image/*" class="hidden">
+
+                {{-- Loading overlay --}}
+                <div wire:loading wire:target="photo"
+                    class="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs rounded-full">
+                    Uploading...
+                </div>
+            </div>
+
+            {{-- Tombol simpan --}}
+            {{-- <button 
+        type="submit" 
+        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md shadow-md transition"
+        wire:loading.attr="disabled"
+    >
+        Simpan Perubahan
+    </button> --}}
+        </form>
+
+
+
+
+        {{-- Info Member --}}
         <div class="flex-1">
             <h2 class="text-3xl font-bold mb-1">{{ $member->name }}</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ $member->email }} | {{ $member->phone }}</p>
-            <p class="text-md font-medium">Saldo: <span class="text-green-500">Rp
-                    {{ number_format($member->balance, 0, ',', '.') }}</span> | Point: <span
-                    class="text-yellow-400">{{ $member->member_point }}</span></p>
+            <p class="text-md font-medium">Saldo:
+                <span class="text-green-500">Rp {{ number_format($member->balance, 0, ',', '.') }}</span>
+                | Point: <span class="text-yellow-400">{{ $member->member_point }}</span>
+            </p>
         </div>
 
+        {{-- QR Code --}}
         <div class="flex flex-col items-center space-y-4">
             <div class="w-30 h-30 bg-white rounded-lg flex items-center justify-center">
                 {!! $qrCodeSvg !!}
             </div>
         </div>
     </div>
+
 
 
     <div x-data="{ open: false }" class="relative">
@@ -187,6 +234,20 @@
             </form>
         </div>
     @endif
+    @if ($topUps->count())
+        <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+            <h3 class="font-semibold mb-2">Riwayat Top Up</h3>
+            <ul class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach ($topUps as $topUp)
+                    <li class="py-2 flex justify-between">
+                        <span>{{ $topUp->created_at->format('d/m/Y H:i') }}</span>
+                        <span class="text-green-500">Rp {{ number_format($topUp->amount, 0, ',', '.') }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
 
     <!-- Transaksi -->
     @if (auth()->user()->role->name !== 'member')
