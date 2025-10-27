@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\SwooshWebController;
+use App\Models\Service;
 use Laravel\Fortify\Features;
 use App\Livewire\ScanMemberCard;
 use App\Livewire\Roles\ListRoles;
@@ -18,9 +20,9 @@ use App\Livewire\Transactions\ListTransactions;
 use App\Livewire\PaymentMethods\ListPaymentMethods;
 use App\Livewire\TransactionItems\ListTransactionItems;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+
+Route::get('/', [SwooshWebController::class, 'index'])->name('home');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'role:admin,cashier'])

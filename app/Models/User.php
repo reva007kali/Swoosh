@@ -74,12 +74,12 @@ class User extends Authenticatable
         return $this->hasMany(Member::class);
     }
     public function getImageUrlAttribute(): string
-{
-    if ($this->image && file_exists(storage_path('app/public/' . $this->image))) {
-        return asset('storage/' . $this->image);
-    }
+    {
+        if ($this->image && file_exists(storage_path('app/public/' . $this->image))) {
+            return asset('storage/' . $this->image);
+        }
 
-    // fallback kalau kosong atau file-nya hilang
-    return asset('image/user.png');
-}
+        // fallback kalau kosong atau file-nya hilang
+        return asset('image/user.png');
+    }
 }

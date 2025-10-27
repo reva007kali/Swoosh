@@ -65,11 +65,13 @@
             @endif
         </flux:navlist>
 
-
-        <flux:navlist.item icon="qr-code" :href="route('scan.member')" :current="request()->routeIs('scan.member')"
-            wire:navigate class="!bg-blue-500 !text-white hover:!bg-blue-600 mb-3 !w-fit !rounded-full">
-            {{ __('Scan Member Card') }}
-        </flux:navlist.item>
+        @if (auth()->user()->role->name !== 'member')
+            <flux:navlist.item icon="qr-code" :href="route('scan.member')"
+                :current="request()->routeIs('scan.member')" wire:navigate
+                class="!bg-blue-500 !text-white hover:!bg-blue-600 mb-3 !w-fit !rounded-full">
+                {{ __('Scan Member Card') }}
+            </flux:navlist.item>
+        @endif
 
 
         <flux:spacer />
