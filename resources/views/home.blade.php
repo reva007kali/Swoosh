@@ -8,7 +8,7 @@
 
     <link rel="icon" href="/image/swooshico.png" sizes="any">
 
-    <link rel="manifest" href="/public/manifest.json">
+    <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#1e3a8a">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
