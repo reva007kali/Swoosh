@@ -7,10 +7,12 @@ use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -36,6 +38,10 @@ class ListServices extends Component implements HasActions, HasSchemas, HasTable
             ->query(fn(): Builder => Service::query())
             ->heading('List Services')
             ->columns([
+                ImageColumn::make('image')
+                    ->disk('public')
+                    ->label('Image')
+                    ->square(),
                 TextColumn::make('name')
                     ->sortable()
                     ->label('Nama Service'),
@@ -62,6 +68,14 @@ class ListServices extends Component implements HasActions, HasSchemas, HasTable
                 CreateAction::make()
                     ->label('Tambah Layanan')
                     ->form([
+                        FileUpload::make('image')
+                            ->label('image')
+                            ->image()
+                            ->directory('services')
+                            ->disk('public')
+                            ->visibility('public')
+                            ->imagePreviewHeight('80') // preview kecil
+                            ->nullable(),
                         TextInput::make('name')
                             ->required(),
                         TextInput::make('description')
@@ -90,6 +104,14 @@ class ListServices extends Component implements HasActions, HasSchemas, HasTable
                 EditAction::make()
                     ->label('Edit')
                     ->form([
+                        FileUpload::make('image')
+                            ->label('image')
+                            ->image()
+                            ->directory('services')
+                            ->disk('public')
+                            ->visibility('public')
+                            ->imagePreviewHeight('80') // preview kecil
+                            ->nullable(),
                         TextInput::make('name')
                             ->required(),
                         TextInput::make('description')
@@ -112,10 +134,10 @@ class ListServices extends Component implements HasActions, HasSchemas, HasTable
                             ])
                             ->default(true)
                             ->required(),
-                            ]),
+                    ]),
 
-                            DeleteAction::make('delete')
-                            ->label('')
+                DeleteAction::make('delete')
+                    ->label('')
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

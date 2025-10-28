@@ -1,6 +1,10 @@
 {
+  "public/image/hero2.png": {
+    "file": "assets/hero2-5xEoFCXg.png",
+    "src": "public/image/hero2.png"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-C0HYJQIq.css",
+    "file": "assets/app-Cv4GAnmf.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
@@ -8,7 +12,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-l0sNRNKZ.js",
+    "file": "assets/app-BB5MnxAj.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

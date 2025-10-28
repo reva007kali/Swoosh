@@ -9,651 +9,525 @@
     <link rel="icon" href="/image/swooshico.png" sizes="any">
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js"></script>
 
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @fluxAppearance
-    
+    {{-- @fluxAppearance --}}
     <style>
-        /* Heading font */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5 {
-            font-family: "Poppins", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        }
-
-        /* Body fallback */
         body {
-            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            font-family: Jura;
         }
 
-        /* Subtle motion for floating shapes */
-        @keyframes floaty {
-            0% {
-                transform: translateY(0px) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-8px) rotate(3deg);
-            }
-
-            100% {
-                transform: translateY(0px) rotate(0deg);
-            }
+        .font-roboto {
+            font-family: Roboto;
         }
 
-        .floaty {
-            animation: floaty 6s ease-in-out infinite;
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* small tweak for dark focus outlines */
-        :focus {
-            outline: none;
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
         }
 
-        /* subtle glass panel on very dark background */
-        .glass {
-            background: rgba(17, 24, 39, 0.6);
-            /* neutral-900/60 */
-            backdrop-filter: blur(6px);
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #3b82f6 !important;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #3b82f6 !important;
         }
     </style>
 </head>
 
-<body class="antialiased bg-gray-900 text-gray-100">
-    <div class="min-h-screen">
+<body class="antialiased font-sans bg-zinc-950 text-white">
 
-        <!-- Navbar -->
-        <nav id="site-nav"
-            class="fixed top-4 left-0 right-0 z-50 mx-auto max-w-7xl px-5 py-3 rounded-2xl glass border border-gray-800 shadow-lg transition-all">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <a href="#" class="inline-flex items-center space-x-3">
-                        <div
-                            class="w-11 h-11 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow">
-                            <img src="/image/swooshico.png" alt="Swoosh" class="w-7 h-7 object-contain" />
-                        </div>
-                        <div>
-                            <h1
-                                class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
-                                Swoosh Carwash</h1>
-                            <p class="text-xs text-gray-400 -mt-1">Professional Car Care</p>
-                        </div>
-                    </a>
-                </div>
+    <x-navbar></x-navbar>
 
-                <!-- Desktop -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Home</a>
-                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">About</a>
-                    <a href="#services"
-                        class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Services</a>
-                    <a href="#facilities"
-                        class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Facilities</a>
-                    <a href="#reservation"
-                        class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Book</a>
-                    <a href="#contact"
-                        class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Contact</a>
-                </div>
 
-                <div class="flex items-center space-x-3">
-                    @auth
-                        <div class="hidden md:flex items-center space-x-3">
-                            <img src="{{ Auth::user()->image_url }}"
-                                class="w-9 h-9 rounded-full border-2 border-blue-500 object-cover" alt="avatar" />
-                            <span class="text-sm font-medium text-gray-200">{{ Auth::user()->name }}</span>
 
-                            @if (in_array(Auth::user()->role->name, ['admin', 'cashier']))
-                                <a href="{{ route('dashboard') }}"
-                                    class="ml-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:shadow-xl transform hover:-translate-y-0.5">
-                                    Dashboard
-                                </a>
-                            @elseif (Auth::user()->role->name === 'member')
-                                @php
-                                    $member = \App\Models\Member::where('user_id', Auth::id())->first();
-                                @endphp
-                                @if ($member && $member->qr_code)
-                                    <a href="{{ route('members.view', ['qr_code' => $member->qr_code]) }}"
-                                        class="ml-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:shadow-xl transform hover:-translate-y-0.5">
-                                        Profile
-                                    </a>
-                                @endif
-                            @endif
-                        </div>
-                    @else
-                        <div class="hidden md:flex items-center space-x-2">
-                            <a href="{{ route('login') }}"
-                                class="text-sm font-medium text-gray-300 hover:text-blue-300 transition">Login</a>
-                            <a href="{{ route('register') }}"
-                                class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-sm font-semibold hover:shadow-xl transition">Register</a>
-                        </div>
-                    @endauth
+    <x-hero></x-hero>
 
-                    <!-- Mobile menu button -->
-                    <button id="nav-toggle" aria-controls="mobile-menu" aria-expanded="false"
-                        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-800 border border-gray-700 shadow-sm hover:scale-105 transition">
-                        <svg id="nav-open" class="w-6 h-6 text-gray-200" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg id="nav-close" class="w-6 h-6 text-gray-200 hidden" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+    <!-- Promotional Banner -->
+    <section class="py-4 bg-gradient-to-r from-blue-600 to-blue-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p class="text-lg md:text-xl font-bold">GRAND OPENING SPECIAL! 30% OFF on All Nano Coating Services |
+                    Valid Until Dec 2025</p>
+            </div>
+        </div>
+    </section>
+
+    <x-about></x-about>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 lg:px-10 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Swoosh Carwash</h2>
+                <p class="text-gray-400 text-lg">Premium Protection for Your Premium Vehicle</p>
             </div>
 
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="mt-3 hidden md:hidden">
-                <div class="grid gap-2 bg-gray-800 rounded-lg p-3 border border-gray-700">
-                    <a href="#home" class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">Home</a>
-                    <a href="#about" class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">About</a>
-                    <a href="#services" class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">Services</a>
-                    <a href="#facilities"
-                        class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">Facilities</a>
-                    <a href="#reservation" class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">Book</a>
-                    <a href="#contact" class="block px-3 py-2 rounded-lg text-gray-200 hover:bg-gray-700">Contact</a>
-                </div>
-            </div>
-        </nav>
+            <div class="">
+                <div class="grid md:grid-cols-3 gap-8 items-center mx-auto">
 
-        <!-- Hero -->
-        <header id="home" class="relative pt-28 pb-20">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-10 items-center">
-                    <div>
-                        <div
-                            class="inline-flex items-center gap-3 px-3 py-2 rounded-full mb-6 bg-gradient-to-r from-gray-800/60 to-gray-900/50 border border-gray-700">
-                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.164c.969 0 1.371 1.24.588 1.81l-3.37 2.452a1 1 0 00-.364 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.37-2.452a1 1 0 00-1.176 0l-3.37 2.452c-.784.57-1.84-.197-1.54-1.118l1.287-3.95a1 1 0 00-.364-1.118L2.09 9.377c-.783-.57-.38-1.81.588-1.81h4.164a1 1 0 00.95-.69l1.286-3.95z" />
-                            </svg>
-                            <span class="font-medium text-gray-200">Premium • Eco Friendly • Fast</span>
-                        </div>
-
-                        <h2 class="text-4xl md:text-5xl font-bold leading-tight text-white mb-4">
-                            Clean. Shine. Drive with
-                            <span
-                                class="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">Confidence</span>
-                        </h2>
-
-                        <p class="text-lg text-gray-300 mb-8 max-w-xl">
-                            Swoosh Carwash blends speed, precision, and premium care. From quick washes to full
-                            detailing, we've got your ride covered — plus a comfy Swoosh Caffe while you wait.
-                        </p>
-
-                        <div class="flex flex-wrap gap-4">
-                            <a href="#reservation"
-                                class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full font-semibold shadow-2xl hover:scale-105 transition transform">
-                                Book Now
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                                </svg>
-                            </a>
-
-                            <a href="#services"
-                                class="inline-flex items-center gap-3 px-6 py-3 border border-gray-700 text-blue-200 rounded-full font-semibold hover:bg-gray-800 transition">
-                                Our Services
-                            </a>
-
-                            <div
-                                class="inline-flex items-center gap-3 px-4 py-3 rounded-full text-sm text-gray-300 bg-gray-800 border border-gray-700">
-                                <svg class="w-5 h-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path
-                                        d="M2 11a1 1 0 011-1h4l1-2h4l1 2h4a1 1 0 011 1v4a1 1 0 01-1 1h-4l-1 2H8l-1-2H3a1 1 0 01-1-1v-4z" />
-                                </svg>
-                                <span class="text-xs">Express Lane Available</span>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 grid grid-cols-3 gap-3 max-w-md">
-                            <div
-                                class="flex items-center gap-3 bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-700">
-                                <div
-                                    class="w-10 h-10 rounded-md bg-gradient-to-br from-blue-700 to-indigo-600 flex items-center justify-center text-white">
-                                    ⭑</div>
-                                <div>
-                                    <div class="text-sm font-semibold text-gray-200">Quality</div>
-                                    <div class="text-xs text-gray-400">Eco products</div>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center gap-3 bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-700">
-                                <div
-                                    class="w-10 h-10 rounded-md bg-gradient-to-br from-green-500 to-teal-400 flex items-center justify-center text-white">
-                                    ⚡</div>
-                                <div>
-                                    <div class="text-sm font-semibold text-gray-200">Fast</div>
-                                    <div class="text-xs text-gray-400">Quick turnaround</div>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center gap-3 bg-gray-800 rounded-lg p-3 shadow-sm border border-gray-700">
-                                <div
-                                    class="w-10 h-10 rounded-md bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center text-white">
-                                    ☕</div>
-                                <div>
-                                    <div class="text-sm font-semibold text-gray-200">Relax</div>
-                                    <div class="text-xs text-gray-400">Swoosh Caffe</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <!-- floating sporty shapes -->
-                        <div
-                            class="absolute -right-6 -top-6 w-36 h-36 rounded-full bg-gradient-to-br from-blue-700 to-indigo-600 opacity-60 blur-2xl floaty">
-                        </div>
-                        <div
-                            class="absolute -left-10 -bottom-10 w-44 h-44 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 opacity-25 blur-3xl floaty">
-                        </div>
-
-                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-                            <img src="/image/hero.jpg" alt="Carwash Hero"
-                                class="w-full object-cover transform hover:scale-105 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                            <div
-                                class="absolute bottom-6 left-6 bg-gradient-to-r from-gray-800/80 to-gray-900/70 px-4 py-2 rounded-full shadow-md text-sm font-semibold text-gray-100 border border-gray-700">
-                                Sports Shine Package — from <span class="text-blue-300">IDR 150k</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- About -->
-        <section id="about" class="py-16 px-6">
-            <div class="max-w-4xl mx-auto text-center">
-                <div
-                    class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-gray-700">
-                    About Us</div>
-                <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">We make your car look and feel new</h3>
-                <p class="text-lg text-gray-300 leading-relaxed">Swoosh Carwash is committed to delivering premium
-                    car care using eco-friendly solutions, professional technicians, and a focus on speed and
-                    convenience.
-                    Relax at Swoosh Caffe while your car gets the spa treatment.</p>
-            </div>
-        </section>
-
-        <!-- Services -->
-        <section id="services" class="py-16 bg-gray-900 px-6">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <div
-                            class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-3 border border-gray-700">
-                            Services</div>
-                        <h3 class="text-3xl md:text-4xl font-bold text-white">Our Services</h3>
-                        <p class="text-gray-400 mt-2">Engineered for performance and protection.</p>
-                    </div>
-                    <div class="text-sm text-gray-400">Select a package that fits your ride</div>
-                </div>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Service 1 -->
                     @foreach ($services as $service)
-                        <div
-                            class="group relative bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow hover:shadow-xl transition transform hover:-translate-y-2">
-                            <div class="flex items-start gap-4">
+                        <div class="">
+                            <div class="glass-effect rounded-2xl overflow-hidden h-full hover:border-blue-500">
                                 <div
-                                    class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg shadow-md">
-                                    <img src="{{ $service->image }}" alt="service" class="w-8 h-8 object-contain" />
+                                    class="bg-gradient-to-br from-blue-600 overflow-hidden to-blue-800 h-48 flex items-center justify-center">
+                                    <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}">
                                 </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold text-white">{{ $service->name }}</h4>
-                                    <p class="text-sm text-gray-400 mt-1">{{ Str::limit($service->description, 110) }}
-                                    </p>
+                                <div class="p-6">
+                                    <h3 class="text-2xl font-bold mb-2 text-blue-400">{{ $service->name }}</h3>
+                                    <p class="text-gray-400 mb-4">{{ $service->description }}</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-3xl font-bold font-roboto text-white italic">IDR
+                                            {{ number_format($service->price, 0, ',', '.') }}</span>
+                                        <a href="#booking"
+                                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Book</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mt-4 flex items-center justify-between">
-                                <div class="text-sm font-medium text-gray-200">From <span class="text-blue-300">IDR
-                                        120k</span></div>
-                                <a href="#reservation"
-                                    class="text-xs px-3 py-2 bg-gradient-to-r from-blue-700 to-indigo-600 text-white rounded-full font-semibold hover:opacity-95 transition">Book</a>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Facilities -->
-        <section id="facilities" class="py-16 bg-gradient-to-b from-gray-900 to-gray-900 px-6">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-10">
-                    <div
-                        class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-gray-700">
-                        Facilities</div>
-                    <h3 class="text-3xl md:text-4xl font-bold text-white mb-2">Modern amenities for your comfort</h3>
-                    <p class="text-gray-400">Comfortable lounge, free WiFi, and secure parking.</p>
+    <!-- Cafe Section -->
+    <section id="cafe" class="py-20 lg:px-10 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="glass-effect overflow-hidden rounded-2xl">
+                    <img src="image/caffe.jpg" alt="">
                 </div>
-
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow hover:shadow-xl transition border border-gray-700">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-700 to-indigo-600 flex items-center justify-center text-white">
-                                ☕</div>
-                            <h4 class="text-lg font-semibold text-white">Swoosh Caffe</h4>
-                        </div>
-                        <p class="text-sm text-gray-400">Premium menu, cozy seating, and a great view while you wait.
-                        </p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow hover:shadow-xl transition border border-gray-700">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 to-teal-500 flex items-center justify-center text-white">
-                                📶</div>
-                            <h4 class="text-lg font-semibold text-white">Free WiFi</h4>
-                        </div>
-                        <p class="text-sm text-gray-400">Stay productive or entertained with high-speed connectivity.
-                        </p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow hover:shadow-xl transition border border-gray-700">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div
-                                class="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-700 to-blue-600 flex items-center justify-center text-white">
-                                🔒</div>
-                            <h4 class="text-lg font-semibold text-white">Secure Parking</h4>
-                        </div>
-                        <p class="text-sm text-gray-400">Well-lit, guarded parking while your vehicle is in our care.
-                        </p>
-                    </div>
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">Swoosh Cafe</h2>
+                    <h3 class="text-2xl font-semibold text-blue-400 mb-4">Relax While We Care for Your Car</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">Why wait in your car when you can enjoy premium
+                        coffee and snacks in our comfortable, air-conditioned cafe? Swoosh Cafe offers a perfect blend
+                        of comfort and convenience while our experts work their magic on your vehicle.</p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">Our cafe features:</p>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">✓</span>
+                            <span>Premium coffee, tea, and specialty beverages</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">✓</span>
+                            <span>Fresh pastries and light meals</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">✓</span>
+                            <span>Comfortable seating with full air conditioning</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">✓</span>
+                            <span>Free high-speed Wi-Fi for work or entertainment</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2">✓</span>
+                            <span>Live viewing of your car detailing process</span>
+                        </li>
+                    </ul>
+                    <button
+                        class="mt-6 px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition transform hover:scale-105">View
+                        Menu</button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Testimonials -->
-        <section id="testimonials" class="py-16 px-6 bg-gray-900">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-8">
-                    <div
-                        class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-gray-700">
-                        Testimonials</div>
-                    <h3 class="text-3xl md:text-4xl font-bold text-white">What our customers say</h3>
-                    <p class="text-gray-400">Real feedback from drivers who trust Swoosh.</p>
+    <!-- Facilities Section -->
+    <section id="facilities" class="py-20 lg:px-10 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Facilities</h2>
+                <p class="text-gray-400 text-lg">Comfort and Convenience at Every Step</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">☕</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Swoosh Cafe</h3>
+                    <p class="text-gray-400">Fully air-conditioned waiting lounge with premium cafe service</p>
                 </div>
-
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700">
-                        <div class="flex items-center mb-3">
-                            <div
-                                class="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-green-500 text-white flex items-center justify-center font-bold mr-3">
-                                SA</div>
-                            <div>
-                                <h5 class="font-semibold text-white">Sarah Anderson</h5>
-                                <p class="text-xs text-gray-400">Premium Member</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-300">"Love the Swoosh Caffe! Great coffee and the perfect place to wait.
-                            The online booking system is super convenient."</p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700">
-                        <div class="flex items-center mb-3">
-                            <div
-                                class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-purple-500 text-white flex items-center justify-center font-bold mr-3">
-                                MR</div>
-                            <div>
-                                <h5 class="font-semibold text-white">Michael Roberts</h5>
-                                <p class="text-xs text-gray-400">Business Owner</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-300">"Best carwash in Jakarta! Eco-friendly products, professional team,
-                            and reasonable prices. Highly recommended!"</p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700">
-                        <div class="flex items-center mb-3">
-                            <div
-                                class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-700 to-indigo-600 text-white flex items-center justify-center font-bold mr-3">
-                                AS</div>
-                            <div>
-                                <h5 class="font-semibold text-white">Alex Sim</h5>
-                                <p class="text-xs text-gray-400">Regular</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-300">"Quick, thorough, and my car looks brand new. The staff are friendly
-                            and the waiting area is great."</p>
-                    </div>
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">🚬</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Smoking Room</h3>
+                    <p class="text-gray-400">Dedicated smoking area with proper ventilation system</p>
+                </div>
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">🎮</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Playground</h3>
+                    <p class="text-gray-400">Safe and fun play area to keep your children entertained</p>
+                </div>
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">🕌</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Musholla</h3>
+                    <p class="text-gray-400">Clean and comfortable prayer room for your spiritual needs</p>
+                </div>
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">📶</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">High-Speed Wi-Fi</h3>
+                    <p class="text-gray-400">Complimentary fast internet access throughout the facility</p>
+                </div>
+                <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
+                    <div class="text-4xl mb-4">🅿️</div>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Ample Parking</h3>
+                    <p class="text-gray-400">Spacious parking area with security and easy access</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Reservation -->
-        <section id="reservation" class="py-16 bg-gray-900 px-6">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-8">
-                    <div
-                        class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-gray-700">
-                        Book Now</div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Fast online booking</h3>
-                    <p class="text-gray-400">Reserve your spot in seconds — choose your package and time.</p>
-                </div>
-
-                <div
-                    class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-lg p-6 md:p-8 border border-gray-700">
-                    <form action="#" method="POST" class="space-y-4" novalidate>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
-                                <input type="text" name="name" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    placeholder="Your name" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
-                                <input type="tel" name="phone" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none"
-                                    placeholder="+62 xxx xxxx xxxx" />
-                            </div>
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 lg:px-10 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">What Our Clients Say</h2>
+                <p class="text-gray-400 text-lg">Real Reviews from Real Customers</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-effect p-6 rounded-xl">
+                    <div class="flex mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"The best car wash I've ever experienced! The nano coating
+                        service made my car look brand new. Plus, the cafe is amazing - I actually enjoyed waiting!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">AR</span>
                         </div>
-
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Vehicle Type</label>
-                                <select name="vehicle_type" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none">
-                                    <option value="">Select vehicle type</option>
-                                    <option value="sedan">Sedan</option>
-                                    <option value="suv">SUV</option>
-                                    <option value="mpv">MPV</option>
-                                    <option value="truck">Truck</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Service Type</label>
-                                <select name="service_type" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none">
-                                    <option value="">Select service</option>
-                                    <option value="basic">Basic Wash</option>
-                                    <option value="premium">Premium Wash</option>
-                                    <option value="detailing">Full Detailing</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Preferred Date</label>
-                                <input type="date" name="date" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Preferred Time</label>
-                                <input type="time" name="time" required
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none" />
-                            </div>
-                        </div>
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Additional Notes
-                                (Optional)</label>
-                            <textarea name="notes" rows="4"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-100 focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-                                placeholder="Any special requests or notes..."></textarea>
+                            <p class="font-semibold">Ahmad Rizki</p>
+                            <p class="text-sm text-gray-400">Mercedes Owner</p>
                         </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-6 rounded-xl">
+                    <div class="flex mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"Professional service with attention to detail. The facilities
+                        are top-notch, especially the kids' playground. My family loves coming here!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">SP</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Siti Permata</p>
+                            <p class="text-sm text-gray-400">BMW Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-6 rounded-xl">
+                    <div class="flex mb-4">
+                        <span class="text-yellow-500">★★★★★</span>
+                    </div>
+                    <p class="text-gray-300 mb-4 italic">"Outstanding results! The ceramic coating has kept my car
+                        looking pristine for months. Worth every rupiah. Highly recommended!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">BW</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Budi Wijaya</p>
+                            <p class="text-sm text-gray-400">Audi Owner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Booking Section -->
+    <section id="booking" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Book Your Service</h2>
+                <p class="text-gray-400 text-lg">Fill in the form below to schedule your appointment</p>
+            </div>
+            <form class="glass-effect p-8 rounded-2xl space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Full Name *</label>
+                        <input type="text" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                            placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Email Address *</label>
+                        <input type="email" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                            placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-blue-400">Address *</label>
+                    <textarea required
+                        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                        rows="2" placeholder="Your complete address"></textarea>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Phone Number *</label>
+                        <input type="tel" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                            placeholder="+62 812-3456-7890">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Preferred Date *</label>
+                        <input type="date" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Car Type *</label>
+                        <input type="text" required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                            placeholder="Toyota Camry 2020">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Service Type *</label>
+                        <select required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                            <option value="">Select Service</option>
+                            <option value="ultra-nano">Ultra Nano Coating - Rp 3,500,000</option>
+                            <option value="ceramic">Nano Ceramic Coating - Rp 2,500,000</option>
+                            <option value="sealant">Super Nano Sealant - Rp 1,500,000</option>
+                            <option value="other">Other Services</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-blue-400">Additional Notes</label>
+                    <textarea
+                        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"
+                        rows="3" placeholder="Any special requests or additional information"></textarea>
+                </div>
+
+                <div class="border-t border-gray-700 pt-6">
+                    <h3 class="text-xl font-bold mb-4 text-blue-400">Payment Information</h3>
+
+                    <div class="glass-effect p-6 rounded-lg mb-6">
+                        <p class="text-sm text-gray-400 mb-3">Scan the QR code below to make payment via QRIS</p>
+                        <div class="bg-white p-4 rounded-lg inline-block">
+                            <div class="w-48 h-48 bg-gray-200 flex items-center justify-center">
+                                <span class="text-gray-500 text-center text-sm">QRIS Code<br />Placeholder</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">* 50% down payment required to confirm booking</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold mb-2 text-blue-400">Upload Payment Proof *</label>
+                        <div class="relative">
+                            <input type="file" id="paymentProof" required accept="image/*" class="hidden">
+                            <label for="paymentProof"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-between cursor-pointer hover:border-blue-500 transition">
+                                <span class="text-gray-400" id="fileName">Choose file or drag here</span>
+                                <span class="text-blue-500">📎</span>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Accepted formats: JPG, PNG (Max 5MB)</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <input type="checkbox" id="terms" required
+                        class="mt-1 mr-3 w-4 h-4 text-blue-600 bg-gray-800 border-gray-700 rounded focus:ring-blue-500">
+                    <label for="terms" class="text-sm text-gray-400">I agree to the terms and conditions and
+                        understand that my booking will be confirmed after payment verification *</label>
+                </div>
+
+                <button type="submit"
+                    class="w-full px-8 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg text-lg font-semibold transition transform hover:scale-105">Submit
+                    Booking</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 lg:px-10 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Get In Touch</h2>
+                <p class="text-gray-400 text-lg">We're here to answer your questions</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <div class="glass-effect p-8 rounded-2xl mb-6">
+                        <h3 class="text-2xl font-bold mb-6 text-blue-400">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4">📍</span>
+                                <div>
+                                    <p class="font-semibold">Address</p>
+                                    <p class="text-gray-400">Jl. Premium Boulevard No. 123<br />Jakarta Selatan 12345,
+                                        Indonesia</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4">📞</span>
+                                <div>
+                                    <p class="font-semibold">Phone</p>
+                                    <p class="text-gray-400">+62 812-3456-7890</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4">✉️</span>
+                                <div>
+                                    <p class="font-semibold">Email</p>
+                                    <p class="text-gray-400">info@autoglow.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-2xl mr-4">🕐</span>
+                                <div>
+                                    <p class="font-semibold">Opening Hours</p>
+                                    <p class="text-gray-400">Monday - Sunday: 08:00 - 20:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-effect p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-blue-400">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#"
+                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
+                                <span>f</span>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
+                                <span>📷</span>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
+                                <span>🐦</span>
+                            </a>
+                            <a href="#"
+                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
+                                <span>in</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-effect p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-blue-400">Send Us a Message</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <input type="text" placeholder="Your Name"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                        </div>
+                        <div>
+                            <input type="email" placeholder="Your Email"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Subject"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
+                        </div>
+                        <div>
+                            <textarea placeholder="Your Message" rows="4"
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"></textarea>
+                        </div>
                         <button type="submit"
-                            class="w-full inline-flex items-center justify-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold shadow-2xl hover:scale-105 transition transform">
-                            Book Now
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                            </svg>
-                        </button>
+                            class="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition transform hover:scale-105">Send
+                            Message</button>
                     </form>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Contact -->
-        <section id="contact" class="py-16 px-6 bg-gray-900">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-8">
-                    <div
-                        class="inline-block px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 text-blue-300 rounded-full text-sm font-semibold mb-4 border border-gray-700">
-                        Get In Touch</div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Contact Us</h3>
-                    <p class="text-gray-400">We're here to help and answer any questions</p>
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700 text-center">
-                        <div
-                            class="w-14 h-14 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 mx-auto flex items-center justify-center text-white mb-4">
-                            📞</div>
-                        <h4 class="font-semibold text-white">Phone</h4>
-                        <p class="text-sm text-gray-400">+62 123 4567 890</p>
-                        <p class="text-sm text-gray-400">Mon-Sun: 8AM - 8PM</p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700 text-center">
-                        <div
-                            class="w-14 h-14 rounded-lg bg-gradient-to-br from-green-500 to-teal-400 mx-auto flex items-center justify-center text-white mb-4">
-                            ✉️</div>
-                        <h4 class="font-semibold text-white">Email</h4>
-                        <p class="text-sm text-gray-400">info@swooshcarwash.com</p>
-                        <p class="text-sm text-gray-400">support@swooshcarwash.com</p>
-                    </div>
-
-                    <div class="bg-gray-800 rounded-2xl p-6 shadow border border-gray-700 text-center">
-                        <div
-                            class="w-14 h-14 rounded-lg bg-gradient-to-br from-purple-600 to-pink-500 mx-auto flex items-center justify-center text-white mb-4">
-                            📍</div>
-                        <h4 class="font-semibold text-white">Location</h4>
-                        <p class="text-sm text-gray-400">Jakarta, Indonesia</p>
-                        <p class="text-sm text-gray-400">Easy access parking</p>
-                    </div>
-                </div>
-
-                <div class="text-center">
-                    <iframe src="https://maps.google.com/maps?q=Jakarta&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                        class="w-full h-56 rounded-2xl border-0 shadow-lg" loading="lazy"></iframe>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer
-            class="py-12 px-6 bg-gradient-to-r from-gray-900 via-indigo-900 to-gray-900 text-gray-300 mt-12 border-t border-gray-800">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+    <!-- Footer -->
+    <footer class="bg-gray-950 lg:px-10 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div
-                            class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white font-bold">
-                            S</div>
-                        <div>
-                            <h4 class="font-bold text-lg text-white">Swoosh Carwash</h4>
-                            <p class="text-sm text-gray-400">Clean. Shine. Drive happy.</p>
-                        </div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Swoosh Carwash
+                    </h3>
+                    <p class="text-gray-400 mb-4">Premium car wash and detailing service with state-of-the-art
+                        facilities.</p>
+                    <div class="flex space-x-3">
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">f</a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">📷</a>
+                        <a href="#"
+                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">🐦</a>
                     </div>
-                    <p class="text-sm text-gray-500">© 2025 Swoosh Carwash. All rights reserved. Made with ❤️ in
-                        Jakarta</p>
                 </div>
-
                 <div>
-                    <h4 class="font-semibold mb-3 text-white">Quick Links</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#services" class="hover:text-blue-300">Services</a></li>
-                        <li><a href="#reservation" class="hover:text-blue-300">Book Now</a></li>
-                        <li><a href="#facilities" class="hover:text-blue-300">Facilities</a></li>
-                        <li><a href="#contact" class="hover:text-blue-300">Contact</a></li>
+                    <h4 class="text-lg font-bold mb-4 text-blue-400">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#about" class="hover:text-blue-500 transition">About Us</a></li>
+                        <li><a href="#services" class="hover:text-blue-500 transition">Services</a></li>
+                        <li><a href="#cafe" class="hover:text-blue-500 transition">Cafe</a></li>
+                        <li><a href="#facilities" class="hover:text-blue-500 transition">Facilities</a></li>
                     </ul>
                 </div>
-
                 <div>
-                    <h4 class="font-semibold mb-3 text-white">Follow Us</h4>
-                    <div class="flex items-center gap-3 mb-4">
-                        <a class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition"
-                            href="#"><svg class="w-5 h-5 text-gray-200" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                            </svg></a>
-                        <a class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition"
-                            href="#"><svg class="w-5 h-5 text-gray-200" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z" />
-                            </svg></a>
-                        <a class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition"
-                            href="#"><svg class="w-5 h-5 text-gray-200" fill="currentColor"
-                                viewBox="0 0 24 24">
-                                <path
-                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                            </svg></a>
-                    </div>
-                    <p class="text-sm text-gray-400">Questions? Call us at <span class="font-semibold text-white">+62
-                            123 4567 890</span></p>
+                    <h4 class="text-lg font-bold mb-4 text-blue-400">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#services" class="hover:text-blue-500 transition">Ultra Nano Coating</a></li>
+                        <li><a href="#services" class="hover:text-blue-500 transition">Ceramic Coating</a></li>
+                        <li><a href="#services" class="hover:text-blue-500 transition">Nano Sealant</a></li>
+                        <li><a href="#booking" class="hover:text-blue-500 transition">Book Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-blue-400">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to get special offers and updates</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email"
+                            class="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:border-blue-500 focus:outline-none">
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-r-lg transition">→</button>
+                    </form>
                 </div>
             </div>
-        </footer>
-    </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Swoosh Carwash. All rights reserved.</p>
+                <div class="mt-2">
+                    <a href="#" class="hover:text-blue-500 transition mx-2">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="#" class="hover:text-blue-500 transition mx-2">Terms of Service</a>
+                    <span>|</span>
+                    <a href="#" class="hover:text-blue-500 transition mx-2">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    <!-- Small JS: mobile toggle + header scroll shadow -->
-    <script>
-        (function() {
-            const navToggle = document.getElementById('nav-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const navOpen = document.getElementById('nav-open');
-            const navClose = document.getElementById('nav-close');
-            const siteNav = document.getElementById('site-nav');
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop"
+        class="fixed bottom-8 right-8 w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-2xl shadow-lg transition transform hover:scale-110 opacity-0 pointer-events-none">
+        ↑
+    </button>
 
-            navToggle?.addEventListener('click', function() {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                mobileMenu.classList.toggle('hidden', !isHidden);
-                navOpen.classList.toggle('hidden', !isHidden);
-                navClose.classList.toggle('hidden', isHidden);
-                navToggle.setAttribute('aria-expanded', String(isHidden));
-            });
-
-            // shadow and color tweak on scroll
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 30) {
-                    siteNav.classList.add('shadow-2xl');
-                    siteNav.classList.remove('glass');
-                    siteNav.style.background = 'rgba(10, 14, 22, 0.85)';
-                } else {
-                    siteNav.classList.remove('shadow-2xl');
-                    siteNav.classList.add('glass');
-                    siteNav.style.background = '';
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>
