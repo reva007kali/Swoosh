@@ -20,9 +20,8 @@
 
                 <!-- Auth Buttons -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <button id="loginBtn" class="px-4 py-2 text-blue-500 hover:text-blue-400 transition">Login</button>
-                    <button id="registerBtn"
-                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Register</button>
+                    <a href="/login"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Login</a>
                     <div id="userAvatar"
                         class="hidden w-10 h-10 bg-blue-600 rounded-full items-center justify-center cursor-pointer hover:bg-blue-700 transition">
                         <span class="text-sm font-bold">JD</span>
@@ -42,10 +41,8 @@
                 <a href="#facilities" class="block py-2 hover:text-blue-500 transition">Facilities</a>
                 <a href="#testimonials" class="block py-2 hover:text-blue-500 transition">Testimonials</a>
                 <a href="#contact" class="block py-2 hover:text-blue-500 transition">Contact</a>
-                <button
-                    class="w-full mt-2 px-4 py-2 text-blue-500 hover:text-blue-400 transition text-left">Login</button>
-                <button
-                    class="w-full mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Register</button>
+                <a href="/login"
+                    class="w-full mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Login</a>
             </div>
         </div>
     </nav>
