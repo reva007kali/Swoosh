@@ -89,7 +89,7 @@
                         <div class="">
                             <div class="glass-effect rounded-2xl overflow-hidden h-full hover:border-blue-500">
                                 <div
-                                    class="bg-gradient-to-br from-blue-600 overflow-hidden to-blue-800 h-60 flex items-center justify-center">
+                                    class="bg-gradient-to-br from-blue-600 overflow-hidden to-blue-800 h-52 flex items-center justify-center">
                                     <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}">
                                 </div>
                                 <div class="p-6">
