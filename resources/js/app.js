@@ -104,3 +104,9 @@ document.querySelector("#contact form").addEventListener("submit", (e) => {
     e.preventDefault();
     alert("Message sent! We will get back to you soon.");
 });
+
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(() => console.log('Service Worker registered.'));
+}

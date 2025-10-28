@@ -8,6 +8,15 @@
 
     <link rel="icon" href="/image/swooshico.png" sizes="any">
 
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1e3a8a">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/public/image/swooshico.png">
+
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
