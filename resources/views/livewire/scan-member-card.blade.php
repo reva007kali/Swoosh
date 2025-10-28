@@ -22,4 +22,55 @@
         <div id="error-message" class="mt-3 text-red-500 text-sm hidden"></div>
     </div>
 
+    {{-- Instascan script --}}
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview'),
+                mirror: false
+            });
+
+            let currentCameraIndex = 0;
+            let cameras = [];
+
+            const qrResult = document.getElementById('qr-result');
+            const qrContent = document.getElementById('qr-content');
+            const errorMessage = document.getElementById('error-message');
+            const switchButton = document.getElementById('switch-camera');
+
+            scanner.addListener('scan', function (content) {
+                console.log('QR Code detected:', content);
+                qrContent.textContent = content;
+
+                // redirect otomatis ke hasil QR code
+                setTimeout(() => {
+                    window.location.href = content;
+                }, 800);
+            });
+
+            Instascan.Camera.getCameras().then(function (foundCameras) {
+                if (foundCameras.length > 0) {
+                    cameras = foundCameras;
+                    scanner.start(cameras[currentCameraIndex]);
+                } else {
+                    errorMessage.textContent = 'Tidak ada kamera terdeteksi.';
+                    errorMessage.classList.remove('hidden');
+                }
+            }).catch(function (e) {
+                errorMessage.textContent = 'Gagal mengakses kamera: ' + e.message;
+                errorMessage.classList.remove('hidden');
+                console.error(e);
+            });
+
+            switchButton.addEventListener('click', function () {
+                if (cameras.length > 1) {
+                    currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+                    scanner.start(cameras[currentCameraIndex]);
+                } else {
+                    errorMessage.textContent = 'Tidak ada kamera lain yang tersedia.';
+                    errorMessage.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
 </div>
