@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\SwooshWebController;
 use App\Models\Service;
 use Laravel\Fortify\Features;
 use App\Livewire\ScanMemberCard;
@@ -15,14 +14,19 @@ use App\Livewire\Settings\Appearance;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Services\ListServices;
 use App\Livewire\Vehicles\ListVehicles;
+use App\Livewire\CaffeMenus\ListCaffeMenus;
+use App\Http\Controllers\SwooshWebController;
 use App\Http\Controllers\MemberCardController;
 use App\Livewire\Transactions\ListTransactions;
 use App\Livewire\PaymentMethods\ListPaymentMethods;
 use App\Livewire\TransactionItems\ListTransactionItems;
 
-
-Route::get('/', [SwooshWebController::class, 'index'])->name('home');
-
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+Route::get('/menu', function () {
+    return view('menu');
+})->name('menu');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'role:admin,cashier'])
@@ -56,6 +60,7 @@ Route::middleware(['auth', 'role:admin,cashier'])->group(function () {
     Route::get('/manage-transactions', ListTransactions::class)->name('transactions.index');
     Route::get('/manage-transaction-items', ListTransactionItems::class)->name('transaction.items.index');
     Route::get('/manage-vehicles', ListVehicles::class)->name('vehicles.index');
+    Route::get('/manage-caffe-menus', ListCaffeMenus::class)->name('caffe.menus.index');
 });
 
 

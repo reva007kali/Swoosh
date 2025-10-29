@@ -5,114 +5,128 @@ namespace App\Livewire\Members;
 use App\Models\TopUp;
 use App\Models\Member;
 use App\Models\Service;
-use BaconQrCode\Writer;
-use Livewire\Component;
 use App\Models\Transaction;
 use App\Models\PaymentMethod;
+use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
-use BaconQrCode\Renderer\ImageRenderer;
 use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Writer;
+use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 
 class ViewMember extends Component
 {
     use WithFileUploads;
+
     public $member;
     public $photo;
-    public $amount; // top up
+    public $amount;
     public $service_id;
     public $vehicle_id;
-
     public $showAddVehicle = false;
+
     public $newVehicle = [
         'plate_number' => '',
         'type' => '',
         'color' => '',
     ];
+
     public $quantity = 1;
     public $discount = 0;
     public $tax = 0;
     public $payment_method_id;
-
     public $qrCodeSvg;
 
     public function mount($qr_code)
     {
         $this->member = Member::with('vehicles')->where('qr_code', $qr_code)->firstOrFail();
 
-        // QR code generation
+        // Generate QR Code
         $renderer = new ImageRenderer(
             new RendererStyle(200),
             new SvgImageBackEnd()
-            // new ImagickImageBackEnd()
         );
         $writer = new Writer($renderer);
         $this->qrCodeSvg = $writer->writeString(route('members.view', $this->member->qr_code));
-
-
     }
 
-
+    // ------------------- FOTO PROFIL -------------------
     public function updatedPhoto()
     {
-        // Validasi ukuran & tipe
         $this->validate([
-            'photo' => 'image|max:2048', // Maksimal 2MB
+            'photo' => 'image|max:2048', // maksimal 2MB
         ]);
 
-        // Hapus foto lama jika ada
         if ($this->member->user && $this->member->user->image) {
             Storage::disk('public')->delete($this->member->user->image);
         }
 
-        // Simpan foto baru
         $path = $this->photo->store('profile', 'public');
-
-        // Update di database
         $this->member->user->update(['image' => $path]);
-
-        // Refresh data
         $this->member->refresh();
 
-        // Notifikasi singkat
         session()->flash('message', 'Foto profil berhasil diperbarui!');
     }
-
 
     // ------------------- TOP UP -------------------
     public function topUp()
     {
+        // Validasi input
         $this->validate([
             'amount' => 'required|numeric|min:1000',
+            'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
 
-        $amount = $this->amount; // simpan dulu ke variabel lokal
+        // Simpan nilai amount ke variabel lokal
+        $amount = $this->amount;
 
         // Tambahkan saldo ke member
-        $this->member->increment('balance', $this->amount);
+        $this->member->increment('balance', $amount);
 
-        // Simpan riwayat top-up ke database
-        TopUp::create([
+        // Simpan ke tabel top_ups
+        $topUp = TopUp::create([
             'member_id' => $this->member->id,
-            'user_id' => auth()->id(), // siapa yang melakukan top up
-            'amount' => $this->amount,
+            'user_id' => auth()->id(),
+            'payment_method_id' => $this->payment_method_id,
+            'amount' => $amount,
         ]);
 
-        // Reset input agar kosong setelah top-up
-        $this->reset('amount');
+        // Reset input form agar bersih kembali
+        $this->reset(['amount', 'payment_method_id', 'amountFormatted']);
 
-        // Kirim notifikasi sukses
+        // Ambil nama metode pembayaran dari relasi TopUp
+        $paymentName = optional($topUp->paymentMethod)->name ?? 'metode tidak diketahui';
+
+        // Tampilkan notifikasi sukses
         Notification::make()
             ->title('Top Up Berhasil')
-            ->body('Saldo berhasil ditambahkan: Rp ' . number_format($amount, 0, ',', '.'))
+            ->body('Saldo berhasil ditambahkan sebesar Rp ' . number_format($amount, 0, ',', '.') .
+                ' melalui ' . $paymentName)
             ->success()
             ->send();
+
+        // Optional: refresh data member agar saldo langsung update di UI
+        $this->member->refresh();
     }
+
+
+    public $amountFormatted;
+
+    public function updatedAmountFormatted($value)
+    {
+        // Hapus semua karakter non-angka
+        $numeric = preg_replace('/[^0-9]/', '', $value);
+
+        // Simpan angka murni ke $amount
+        $this->amount = (int) $numeric;
+
+        // Format ulang untuk tampilan (Rp 12.345)
+        $this->amountFormatted = 'Rp ' . number_format($this->amount, 0, ',', '.');
+    }
+
 
     // ------------------- TRANSAKSI -------------------
     public function makeTransaction()
@@ -128,6 +142,7 @@ class ViewMember extends Component
 
         $service = Service::find($this->service_id);
         $vehicle = $this->member->vehicles->find($this->vehicle_id);
+        $paymentMethod = PaymentMethod::find($this->payment_method_id);
 
         if (!$vehicle) {
             Notification::make()
@@ -141,21 +156,28 @@ class ViewMember extends Component
         $totalAmount = $service->price * $this->quantity;
         $grandTotal = $totalAmount - ($this->discount ?? 0) + ($this->tax ?? 0);
 
-        if ($this->member->balance < $grandTotal) {
-            Notification::make()
-                ->title('Gagal')
-                ->body('Saldo tidak cukup.')
-                ->danger()
-                ->send();
-            return;
+        // 🔹 Kurangi saldo hanya jika metode pembayaran adalah Balance/Saldo
+        if ($paymentMethod && in_array(strtolower($paymentMethod->name), ['saldo member', 'saldo'])) {
+
+            // Pastikan saldo cukup
+            if ($this->member->balance < $grandTotal) {
+                Notification::make()
+                    ->title('Gagal')
+                    ->body('Saldo tidak cukup untuk melakukan transaksi ini.')
+                    ->danger()
+                    ->send();
+                return;
+            }
+
+            // Kurangi saldo member
+            $this->member->balance -= $grandTotal;
         }
 
-        // Kurangi saldo & tambah point
-        $this->member->balance -= $grandTotal;
+        // Tambahkan poin loyalti
         $this->member->member_point += 10000;
         $this->member->save();
 
-        // Buat transaksi
+        // Simpan transaksi
         $transaction = Transaction::create([
             'member_id' => $this->member->id,
             'vehicle_id' => $vehicle->id,
@@ -168,6 +190,7 @@ class ViewMember extends Component
             'status' => 'completed',
         ]);
 
+        // Simpan detail item transaksi
         $transaction->items()->create([
             'service_id' => $service->id,
             'quantity' => $this->quantity,
@@ -182,14 +205,11 @@ class ViewMember extends Component
             ->send();
 
         // Reset form
-        $this->service_id = null;
-        $this->vehicle_id = null;
+        $this->reset(['service_id', 'vehicle_id', 'quantity', 'discount', 'tax', 'payment_method_id']);
         $this->quantity = 1;
-        $this->discount = 0;
-        $this->tax = 0;
-        $this->payment_method_id = null;
     }
 
+    // ------------------- TAMBAH KENDARAAN -------------------
     public function addVehicle()
     {
         $this->validate([
@@ -200,7 +220,6 @@ class ViewMember extends Component
 
         $vehicle = $this->member->vehicles()->create($this->newVehicle);
 
-        // Reset form
         $this->newVehicle = [
             'plate_number' => '',
             'type' => '',
@@ -208,25 +227,31 @@ class ViewMember extends Component
         ];
 
         $this->showAddVehicle = false;
-
-        // Pilih kendaraan baru langsung
         $this->vehicle_id = $vehicle->id;
-
-        // Refresh member vehicles
         $this->member->refresh();
 
-
-        $this->successMessage = 'Kendaraan berhasil ditambahkan!';
+        Notification::make()
+            ->title('Kendaraan Ditambahkan')
+            ->body('Kendaraan baru berhasil ditambahkan ke member.')
+            ->success()
+            ->send();
     }
+
+    // ------------------- RENDER -------------------
     public function render()
     {
         $topUps = TopUp::where('member_id', $this->member->id)
             ->latest()
             ->take(10)
             ->get();
+
         $services = Service::all();
         $paymentMethods = PaymentMethod::all();
-        $latestTransactions = $this->member->transactions()->latest()->take(5)->with('items.service', 'vehicle')->get();
+        $latestTransactions = $this->member->transactions()
+            ->latest()
+            ->take(5)
+            ->with('items.service', 'vehicle')
+            ->get();
 
         return view('livewire.members.view-member', compact(
             'services',

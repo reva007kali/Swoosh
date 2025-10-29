@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TopUp extends Model
 {
-    protected $fillable = ['member_id', 'user_id', 'amount'];
+    protected $guarded = [];
 
     public function member()
     {
@@ -17,4 +17,10 @@ class TopUp extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
 }

@@ -9,11 +9,11 @@
     <link rel="icon" href="/image/swooshico.png" sizes="any">
 
     <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#1e3a8a">
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/public/image/swooshico.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/public/image/swooshico.png">
 
 
 
@@ -82,43 +82,8 @@
 
     <x-about></x-about>
 
-    <!-- Services Section -->
-    <section id="services" class="py-20 lg:px-10 bg-gray-900">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Swoosh Carwash</h2>
-                <p class="text-gray-400 text-lg">Premium Protection for Your Premium Vehicle</p>
-            </div>
+    <x-services></x-services>
 
-            <div class="">
-                <div class="grid md:grid-cols-3 gap-8 items-center mx-auto">
-
-                    <!-- Service 1 -->
-                    @foreach ($services as $service)
-                        <div class="">
-                            <div class="glass-effect rounded-2xl overflow-hidden h-full hover:border-blue-500">
-                                <div
-                                    class="bg-gradient-to-br from-blue-600 overflow-hidden to-blue-800 h-52 flex items-center justify-center">
-                                    <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}">
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-2xl font-bold mb-2 text-blue-400">{{ $service->name }}</h3>
-                                    <p class="text-gray-400 mb-4">{{ $service->description }}</p>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-3xl font-bold font-roboto text-white italic">IDR
-                                            {{ number_format($service->price, 0, ',', '.') }}</span>
-                                        <a href="#booking"
-                                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Book</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Cafe Section -->
     <section id="cafe" class="py-20 lg:px-10 bg-gray-800">
@@ -156,9 +121,9 @@
                             <span>Live viewing of your car detailing process</span>
                         </li>
                     </ul>
-                    <button
-                        class="mt-6 px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition transform hover:scale-105">View
-                        Menu</button>
+                    <a href="/menu"
+                        class="block mt-6 w-fit px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition transform hover:scale-105">Lihat
+                        Menu</a>
                 </div>
             </div>
         </div>

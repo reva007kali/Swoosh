@@ -20,7 +20,7 @@
 
                     <flux:navlist.item icon="home" :href="route('dashboard')"
                         :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        <span class="text-md">{{ __('Dashboard') }}</span>
                     </flux:navlist.item>
 
                     <flux:navlist.item icon="circle-stack" :href="route('transactions.index')"
@@ -37,7 +37,7 @@
 
                     <flux:navlist.item icon="wrench-screwdriver" :href="route('services.index')"
                         :current="request()->routeIs('services.index')" wire:navigate>
-                        {{ __('Layanan') }}
+                        {{ __('Produk & Layanan') }}
                     </flux:navlist.item>
 
                     <flux:navlist.item icon="wrench-screwdriver" :href="route('transaction.items.index')"
@@ -53,6 +53,11 @@
                     <flux:navlist.item icon="truck" :href="route('payment.methods.index')"
                         :current="request()->routeIs('payment.methods.index')" wire:navigate>
                         {{ __('Payment Methods') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="" :href="route('caffe.menus.index')"
+                        :current="request()->routeIs('caffe.menus.index')" wire:navigate>
+                        {{ __('Menu Swoosh Caffe') }}
                     </flux:navlist.item>
                 </flux:navlist.group>
 

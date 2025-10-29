@@ -221,33 +221,69 @@
     </div>
 
 
-    <!-- Top Up -->
-    @if (auth()->user()->role->name !== 'member')
-        <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
-            <h3 class="font-bold text-xl mb-4">Top Up Saldo</h3>
-            <form wire:submit.prevent="topUp" class="flex flex-col md:flex-row gap-3">
-                <input type="number" wire:model="amount" placeholder="Jumlah top up"
-                    class="border p-2 rounded w-full md:w-1/3 dark:bg-gray-700 dark:border-gray-600">
-                <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors duration-200">Top
-                    Up</button>
-            </form>
-        </div>
-    @endif
-    @if ($topUps->count())
-        <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-            <h3 class="font-semibold mb-2">Riwayat Top Up</h3>
-            <ul class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
-                @foreach ($topUps as $topUp)
-                    <li class="py-2 flex justify-between">
-                        <span>{{ $topUp->created_at->format('d/m/Y H:i') }}</span>
-                        <span class="text-green-500">Rp {{ number_format($topUp->amount, 0, ',', '.') }}</span>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+   <!-- Top Up -->
+@if (auth()->user()->role->name !== 'member')
+    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md transition-colors duration-300">
+        <h3 class="font-bold text-xl mb-4">Top Up Saldo</h3>
+        <form wire:submit.prevent="topUp" class="flex flex-col md:flex-row gap-3 items-start md:items-end">
 
+            <!-- Jumlah Top Up -->
+            <div class="w-full md:w-1/3">
+                <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Jumlah Top Up
+                </label>
+                <input type="text" wire:model.live="amountFormatted" id="amount"
+    placeholder="Masukkan jumlah"
+    class="border p-2 rounded w-full dark:bg-gray-700 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
+
+                @error('amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Metode Pembayaran -->
+            <div class="w-full md:w-1/3">
+                <label for="payment_method_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Metode Pembayaran
+                </label>
+                <select wire:model="payment_method_id" id="payment_method_id"
+                    class="border p-2 rounded w-full dark:bg-gray-700 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">-- Pilih Metode Pembayaran --</option>
+                    @foreach ($paymentMethods as $pm)
+                        <option value="{{ $pm->id }}">{{ $pm->name }}</option>
+                    @endforeach
+                </select>
+                @error('payment_method_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <!-- Tombol Submit -->
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-6 py-2 rounded-md transition-colors duration-200">
+                Top Up
+            </button>
+        </form>
+    </div>
+@endif
+
+<!-- Riwayat Top Up -->
+@if ($topUps->count())
+    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+        <h3 class="font-semibold mb-2">Riwayat Top Up</h3>
+        <ul class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
+            @foreach ($topUps as $topUp)
+                <li class="py-2 flex justify-between items-center">
+                    <div class="flex flex-col">
+                        <span class="text-gray-600 dark:text-gray-400">{{ $topUp->created_at->format('d/m/Y H:i') }}</span>
+                        @if ($topUp->paymentMethod)
+                            <span class="text-xs text-gray-500 dark:text-gray-400 italic">
+                                {{ $topUp->paymentMethod->name }}
+                            </span>
+                        @endif
+                    </div>
+                    <span class="text-green-500 font-semibold">Rp {{ number_format($topUp->amount, 0, ',', '.') }}</span>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     <!-- Transaksi -->
     @if (auth()->user()->role->name !== 'member')

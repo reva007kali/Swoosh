@@ -130,7 +130,51 @@ class ListTransactions extends Component implements HasActions, HasSchemas, HasT
                     ->modalContent(fn($record) => view(
                         'filament.transactions.detail-modal',
                         ['transaction' => $record->load('items.service')]
-                    ))
+                    )),
+
+                Action::make('cancelTransaction')
+                    ->label('Batalkan Transaksi')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->visible(fn($record) => $record->status === 'completed') // hanya bisa cancel yg selesai
+                    ->action(function ($record) {
+                        $record->load('paymentMethod', 'member');
+
+                        // Cegah double cancel
+                        if ($record->status === 'cancelled') {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Transaksi sudah dibatalkan')
+                                ->warning()
+                                ->send();
+                            return;
+                        }
+
+                        $paymentMethod = $record->paymentMethod;
+                        $member = $record->member;
+
+                        // 🔹 Refund hanya jika metode pembayarannya "Saldo" atau "Balance"
+                        if (str_contains(strtolower($paymentMethod->name), 'saldo member'))
+                            {
+                            $member->balance += $record->grand_total;
+                            $member->save();
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Refund Berhasil')
+                                ->body('Saldo sebesar Rp ' . number_format($record->grand_total, 0, ',', '.') . ' telah dikembalikan ke member ' . $member->name . '.')
+                                ->success()
+                                ->send();
+                        }
+
+                        // Ubah status transaksi
+                        $record->update(['status' => 'cancelled']);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Transaksi Dibatalkan')
+                            ->body('Transaksi #' . $record->id . ' telah dibatalkan.')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

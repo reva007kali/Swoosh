@@ -1,32 +1,32 @@
 // Initialize Swiper
-const swiper = new Swiper(".servicesSwiper", {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    loop: true,
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-        640: {
-            slidesPerView: 1,
-        },
-        768: {
-            slidesPerView: 2,
-        },
-        1024: {
-            slidesPerView: 3,
-        },
-    },
-});
+// const swiper = new Swiper(".servicesSwiper", {
+//     slidesPerView: 1,
+//     spaceBetween: 30,
+//     loop: true,
+//     autoplay: {
+//         delay: 3000,
+//         disableOnInteraction: false,
+//     },
+//     pagination: {
+//         el: ".swiper-pagination",
+//         clickable: true,
+//     },
+//     navigation: {
+//         nextEl: ".swiper-button-next",
+//         prevEl: ".swiper-button-prev",
+//     },
+//     breakpoints: {
+//         640: {
+//             slidesPerView: 1,
+//         },
+//         768: {
+//             slidesPerView: 2,
+//         },
+//         1024: {
+//             slidesPerView: 3,
+//         },
+//     },
+// });
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
@@ -35,35 +35,6 @@ mobileMenuBtn.addEventListener("click", () => {
     mobileMenu.classList.toggle("hidden");
 });
 
-// Login/Register functionality
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const userAvatar = document.getElementById("userAvatar");
-
-loginBtn.addEventListener("click", () => {
-    // Simulate login
-    loginBtn.classList.add("hidden");
-    registerBtn.classList.add("hidden");
-    userAvatar.classList.remove("hidden");
-});
-
-userAvatar.addEventListener("click", () => {
-    // Simulate logout
-    if (confirm("Logout?")) {
-        userAvatar.classList.add("hidden");
-        loginBtn.classList.remove("hidden");
-        registerBtn.classList.remove("hidden");
-    }
-});
-
-// File upload display
-const fileInput = document.getElementById("paymentProof");
-const fileName = document.getElementById("fileName");
-fileInput.addEventListener("change", (e) => {
-    if (e.target.files.length > 0) {
-        fileName.textContent = e.target.files[0].name;
-    }
-});
 
 // Scroll to top button
 const scrollTopBtn = document.getElementById("scrollTop");
@@ -105,8 +76,8 @@ document.querySelector("#contact form").addEventListener("submit", (e) => {
     alert("Message sent! We will get back to you soon.");
 });
 
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(() => console.log('Service Worker registered.'));
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => console.log("Service Worker registered."));
 }
