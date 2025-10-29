@@ -55,6 +55,7 @@ class ListCaffeMenus extends Component implements HasActions, HasSchemas, HasTab
             ])
             ->headerActions([
                 CreateAction::make()
+                ->color('primary')
                     ->label('Tambah Menu')
                     ->schema([
                         FileUpload::make('image')
@@ -92,7 +93,7 @@ class ListCaffeMenus extends Component implements HasActions, HasSchemas, HasTab
                             ]),
                     ]),
                     DeleteAction::make()
-                        ->label('Hapus Menu'),
+                        ->label('Hapus'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

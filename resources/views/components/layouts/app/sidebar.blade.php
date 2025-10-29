@@ -23,7 +23,7 @@
                         <span class="text-md">{{ __('Dashboard') }}</span>
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="circle-stack" :href="route('transactions.index')"
+                    <flux:navlist.item icon="presentation-chart-line" :href="route('transactions.index')"
                         :current="request()->routeIs('transactions.index')" wire:navigate>
                         {{ __('Laporan Transaksi') }}
                     </flux:navlist.item>
@@ -35,12 +35,12 @@
                         {{ __('Member') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="wrench-screwdriver" :href="route('services.index')"
+                    <flux:navlist.item icon="shopping-cart" :href="route('services.index')"
                         :current="request()->routeIs('services.index')" wire:navigate>
                         {{ __('Produk & Layanan') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="wrench-screwdriver" :href="route('transaction.items.index')"
+                    <flux:navlist.item icon="clipboard-document-check" :href="route('transaction.items.index')"
                         :current="request()->routeIs('transaction.items.index')" wire:navigate>
                         {{ __('Items') }}
                     </flux:navlist.item>
@@ -50,12 +50,12 @@
                         {{ __('List Kendaraan') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="truck" :href="route('payment.methods.index')"
+                    <flux:navlist.item icon="currency-dollar" :href="route('payment.methods.index')"
                         :current="request()->routeIs('payment.methods.index')" wire:navigate>
                         {{ __('Payment Methods') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.item icon="" :href="route('caffe.menus.index')"
+                    <flux:navlist.item icon="list-bullet" :href="route('caffe.menus.index')"
                         :current="request()->routeIs('caffe.menus.index')" wire:navigate>
                         {{ __('Menu Swoosh Caffe') }}
                     </flux:navlist.item>
