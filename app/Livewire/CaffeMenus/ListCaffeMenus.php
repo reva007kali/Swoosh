@@ -3,6 +3,7 @@
 namespace App\Livewire\CaffeMenus;
 
 use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -90,6 +91,8 @@ class ListCaffeMenus extends Component implements HasActions, HasSchemas, HasTab
                                 'drink' => 'Drink',
                             ]),
                     ]),
+                    DeleteAction::make()
+                        ->label('Hapus Menu'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
