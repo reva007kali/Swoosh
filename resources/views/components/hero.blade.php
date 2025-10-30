@@ -8,7 +8,7 @@
         <p class="text-xl md:text-2xl text-gray-300 mb-8">Your one-stop auto care and cafe. Sit back,<br> enjoy your coffee,
             and ride your shiny cars</p>
         <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#booking"
+            <a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSfg4bdNdvrjjBx2nkd49DkSKSAnUGRxbVYHufq9emWNA4WmlA/viewform"
                 class="px-8 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-lg font-semibold transition transform hover:scale-105">Book
                 Now</a>
             <a href="#services"

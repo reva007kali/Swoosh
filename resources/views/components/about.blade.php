@@ -8,9 +8,9 @@
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
                     <h3 class="text-3xl font-bold mb-4 text-blue-500">Who We Are</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Swoosh Carwash adalah layanan cuci dan detailing mobil premium yang berkomitmen memberikan hasil terbaik dan pengalaman terbaik bagi pelanggan. Dengan peralatan modern dan tim profesional berpengalaman, kami memastikan setiap kendaraan mendapatkan perawatan maksimal yang membuatnya tampak bersih, berkilau, dan terawat.
+                    <p class="text-gray-300 text-lg mb-4 leading-relaxed">Swoosh Carwash adalah layanan cuci dan detailing mobil premium yang berkomitmen memberikan hasil terbaik dan pengalaman terbaik bagi pelanggan. Dengan peralatan modern dan tim profesional berpengalaman, kami memastikan setiap kendaraan mendapatkan perawatan maksimal yang membuatnya tampak bersih, berkilau, dan terawat.
                     </p>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Kami ahli dalam teknologi nano coating modern yang melindungi cat mobil Anda dalam jangka panjang sekaligus menjaga kilau seperti baru keluar dari showroom. Dengan komitmen pada kualitas dan kepuasan pelanggan, Swoosh Carwash menjadi pilihan terpercaya bagi para pemilik mobil yang ingin mobilnya selalu tampak sempurna.</p>
+                    <p class="text-gray-300 lg:text-lg mb-4 leading-relaxed">Kami ahli dalam teknologi nano coating modern yang melindungi cat mobil Anda dalam jangka panjang sekaligus menjaga kilau seperti baru keluar dari showroom. Dengan komitmen pada kualitas dan kepuasan pelanggan, Swoosh Carwash menjadi pilihan terpercaya bagi para pemilik mobil yang ingin mobilnya selalu tampak sempurna.</p>
                     <div class="grid grid-cols-3 gap-4 mt-8">
                         <div class="text-center p-4 glass-effect rounded-lg">
                             <p class="text-3xl font-bold text-blue-500">5+</p>

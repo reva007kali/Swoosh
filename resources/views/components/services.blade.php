@@ -3,11 +3,11 @@
       <div class="container mx-auto px-4">
           <div class="text-center mb-12">
               <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Swoosh Carwash</h2>
-              <p class="text-gray-400 text-lg">Premium Protection for Your Premium Vehicle</p>
+              <p class="text-gray-400 text-lg">Premium Carwash Services</p>
           </div>
 
           <div class="">
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
                   @foreach ($services as $service)
                       <div
                           class="group relative bg-gradient-to-br from-slate-800/70 to-slate-900/60 rounded-2xl border border-slate-700/50 backdrop-blur-md shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-blue-500/30">

@@ -71,18 +71,24 @@
     @include('components.hero')
 
     <!-- Promotional Banner -->
-    <section class="py-4 bg-gradient-to-r from-blue-600 to-blue-800">
+    {{-- <section class="py-4 bg-gradient-to-r from-blue-600 to-blue-800">
         <div class="container mx-auto px-4">
             <div class="text-center">
                 <p class="text-lg md:text-xl font-bold">GRAND OPENING SPECIAL! 30% OFF on All Nano Coating Services |
                     Valid Until Dec 2025</p>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     @include('components.about')
 
     @include('components.services')
+
+    @include('components.detailing')
+
+    <div class="my-6 mx-auto">
+        <img class="w-full" src="image/banner.jpg" alt="">
+    </div>
 
 
     <!-- Cafe Section -->
@@ -90,37 +96,39 @@
         <div class="container mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="glass-effect overflow-hidden rounded-2xl">
-                    <img src="image/caffe.jpg" alt="">
+                    <img class="lg:h-[500px] object-cover object-bottom lg:w-full" src="image/caffe.jpg" alt="">
                 </div>
                 <div>
                     <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-6">Swoosh Cafe</h2>
                     <h3 class="text-2xl font-semibold text-blue-400 mb-4">Relax While We Care for Your Car</h3>
-                    <p class="text-gray-300 mb-4 leading-relaxed">Why wait in your car when you can enjoy premium
-                        coffee and snacks in our comfortable, air-conditioned cafe? Swoosh Cafe offers a perfect blend
-                        of comfort and convenience while our experts work their magic on your vehicle.</p>
-                    <p class="text-gray-300 mb-6 leading-relaxed">Our cafe features:</p>
+                    <p class="text-gray-300 mb-4 leading-relaxed">Tidak perlu menunggu di dalam mobil ketika Anda bisa
+                        menikmati kopi premium dan camilan lezat di kafe kami yang nyaman dan ber-AC. Swoosh Café
+                        menghadirkan perpaduan sempurna antara kenyamanan dan kemudahan, sementara tim profesional kami
+                        merawat kendaraan Anda dengan sepenuh hati.</p>
                     <ul class="space-y-3 text-gray-300">
                         <li class="flex items-start">
                             <span class="text-blue-500 mr-2">✓</span>
-                            <span>Premium coffee, tea, and specialty beverages</span>
+                            <span>Kopi premium, teh pilihan, dan berbagai minuman</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-blue-500 mr-2">✓</span>
-                            <span>Fresh pastries and light meals</span>
+                            <span>Aneka pastry segar serta hidangan ringan yang disajikan setiap hari</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-blue-500 mr-2">✓</span>
-                            <span>Comfortable seating with full air conditioning</span>
+                            <span>Area duduk yang nyaman dengan fasilitas pendingin udara penuh</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-blue-500 mr-2">✓</span>
-                            <span>Free high-speed Wi-Fi for work or entertainment</span>
+                            <span>Akses Wi-Fi berkecepatan tinggi tanpa biaya untuk kebutuhan kerja maupun
+                                hiburan</span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-blue-500 mr-2">✓</span>
-                            <span>Live viewing of your car detailing process</span>
+                            <span>Fasilitas pemantauan langsung terhadap proses perawatan kendaraan Anda</span>
                         </li>
                     </ul>
+
                     <a href="/menu"
                         class="block mt-6 w-fit px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition transform hover:scale-105">Lihat
                         Menu</a>
@@ -139,100 +147,55 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">☕</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-400">Swoosh Cafe</h3>
-                    <p class="text-gray-400">Fully air-conditioned waiting lounge with premium cafe service</p>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Swoosh Café</h3>
+                    <p class="text-gray-400">Ruang tunggu ber-AC penuh dengan layanan kafe premium yang nyaman dan
+                        modern.</p>
                 </div>
+
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">🚬</div>
                     <h3 class="text-xl font-bold mb-2 text-blue-400">Smoking Room</h3>
-                    <p class="text-gray-400">Dedicated smoking area with proper ventilation system</p>
+                    <p class="text-gray-400">Area khusus merokok dengan sistem ventilasi yang baik dan suasana nyaman.
+                    </p>
                 </div>
+
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">🎮</div>
                     <h3 class="text-xl font-bold mb-2 text-blue-400">Playground</h3>
-                    <p class="text-gray-400">Safe and fun play area to keep your children entertained</p>
+                    <p class="text-gray-400">Area bermain yang aman dan menyenangkan untuk anak-anak, biar mereka tetap
+                        happy.</p>
                 </div>
+
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">🕌</div>
                     <h3 class="text-xl font-bold mb-2 text-blue-400">Musholla</h3>
-                    <p class="text-gray-400">Clean and comfortable prayer room for your spiritual needs</p>
+                    <p class="text-gray-400">Tempat ibadah yang bersih, tenang, dan nyaman untuk memenuhi kebutuhan
+                        spiritual Anda.</p>
                 </div>
+
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">📶</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-400">High-Speed Wi-Fi</h3>
-                    <p class="text-gray-400">Complimentary fast internet access throughout the facility</p>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Wi-Fi Cepat</h3>
+                    <p class="text-gray-400">Nikmati akses internet cepat dan gratis di seluruh area fasilitas kami.</p>
                 </div>
+
                 <div class="glass-effect p-6 rounded-xl hover:border-blue-500 transition transform hover:scale-105">
                     <div class="text-4xl mb-4">🅿️</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-400">Ample Parking</h3>
-                    <p class="text-gray-400">Spacious parking area with security and easy access</p>
+                    <h3 class="text-xl font-bold mb-2 text-blue-400">Area Parkir Luas</h3>
+                    <p class="text-gray-400">Parkiran luas, aman, dan mudah diakses untuk kenyamanan Anda.</p>
                 </div>
+
             </div>
+        </div>
+
+        </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 lg:px-10 bg-gray-800">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">What Our Clients Say</h2>
-                <p class="text-gray-400 text-lg">Real Reviews from Real Customers</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass-effect p-6 rounded-xl">
-                    <div class="flex mb-4">
-                        <span class="text-yellow-500">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-4 italic">"The best car wash I've ever experienced! The nano coating
-                        service made my car look brand new. Plus, the cafe is amazing - I actually enjoyed waiting!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                            <span class="font-bold">AR</span>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Ahmad Rizki</p>
-                            <p class="text-sm text-gray-400">Mercedes Owner</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-effect p-6 rounded-xl">
-                    <div class="flex mb-4">
-                        <span class="text-yellow-500">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-4 italic">"Professional service with attention to detail. The facilities
-                        are top-notch, especially the kids' playground. My family loves coming here!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                            <span class="font-bold">SP</span>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Siti Permata</p>
-                            <p class="text-sm text-gray-400">BMW Owner</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-effect p-6 rounded-xl">
-                    <div class="flex mb-4">
-                        <span class="text-yellow-500">★★★★★</span>
-                    </div>
-                    <p class="text-gray-300 mb-4 italic">"Outstanding results! The ceramic coating has kept my car
-                        looking pristine for months. Worth every rupiah. Highly recommended!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                            <span class="font-bold">BW</span>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Budi Wijaya</p>
-                            <p class="text-sm text-gray-400">Audi Owner</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('components.testimonial')
 
     <!-- Booking Section -->
-    <section id="booking" class="py-20 bg-gray-900">
+    {{-- <section id="booking" class="py-20 bg-gray-900">
         <div class="container mx-auto px-4 max-w-3xl">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold gradient-text mb-4">Book Your Service</h2>
@@ -341,7 +304,7 @@
                     Booking</button>
             </form>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 lg:px-10 bg-gray-800">
@@ -359,29 +322,32 @@
                                 <span class="text-2xl mr-4">📍</span>
                                 <div>
                                     <p class="font-semibold">Address</p>
-                                    <p class="text-gray-400">Jl. Premium Boulevard No. 123<br />Jakarta Selatan 12345,
-                                        Indonesia</p>
+                                    <p class="text-gray-400">Jl. Jemursari 87<br />Surabaya, Indonesia</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <span class="text-2xl mr-4">📞</span>
                                 <div>
                                     <p class="font-semibold">Phone</p>
-                                    <p class="text-gray-400">+62 812-3456-7890</p>
+                                    <a href="https://wa.me/62811962025
+">
+                                        <p class="text-gray-400">+62811962025</p>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="flex items-start">
+                            {{-- <div class="flex items-start">
                                 <span class="text-2xl mr-4">✉️</span>
                                 <div>
                                     <p class="font-semibold">Email</p>
                                     <p class="text-gray-400">info@autoglow.com</p>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="flex items-start">
                                 <span class="text-2xl mr-4">🕐</span>
                                 <div>
                                     <p class="font-semibold">Opening Hours</p>
-                                    <p class="text-gray-400">Monday - Sunday: 08:00 - 20:00</p>
+                                    <p class="text-gray-400">Senin - Minggu 07:30 - 19:30</p>
+                                    <p class="text-gray-400">Hari Jumat 13:00 - 19:30</p>
                                 </div>
                             </div>
                         </div>
@@ -389,48 +355,63 @@
                     <div class="glass-effect p-6 rounded-xl">
                         <h3 class="text-xl font-bold mb-4 text-blue-400">Follow Us</h3>
                         <div class="flex space-x-4">
-                            <a href="#"
-                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
-                                <span>f</span>
-                            </a>
-                            <a href="#"
-                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
-                                <span>📷</span>
-                            </a>
-                            <a href="#"
-                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
-                                <span>🐦</span>
-                            </a>
-                            <a href="#"
-                                class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition transform hover:scale-110">
-                                <span>in</span>
+                            <a href="https://instagram.com/swoosh.carwash.cafe" target="_blank"
+                                class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M16.5 7.5h.01m-4.5 2.25a3.75 3.75 0 1 1-3.75 3.75 3.75 3.75 0 0 1 3.75-3.75z" />
+                                </svg>
+                                swoosh.carwash.caffe
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="glass-effect p-8 rounded-2xl">
                     <h3 class="text-2xl font-bold mb-6 text-blue-400">Send Us a Message</h3>
-                    <form class="space-y-4">
+                    <form id="waForm" class="space-y-4" onsubmit="sendToWhatsApp(event)">
                         <div>
-                            <input type="text" placeholder="Your Name"
+                            <input id="name" type="text" placeholder="Your Name" required
                                 class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
                         </div>
                         <div>
-                            <input type="email" placeholder="Your Email"
+                            <input id="email" type="email" placeholder="Your Email" required
                                 class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
                         </div>
                         <div>
-                            <input type="text" placeholder="Subject"
+                            <input id="subject" type="text" placeholder="Subject" required
                                 class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition">
                         </div>
                         <div>
-                            <textarea placeholder="Your Message" rows="4"
+                            <textarea id="message" placeholder="Your Message" rows="4" required
                                 class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none transition"></textarea>
                         </div>
                         <button type="submit"
-                            class="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition transform hover:scale-105">Send
-                            Message</button>
+                            class="w-full px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition transform hover:scale-105">
+                            Send Message
+                        </button>
                     </form>
+
+                    <script>
+                        function sendToWhatsApp(event) {
+                            event.preventDefault();
+
+                            const name = document.getElementById('name').value;
+                            const email = document.getElementById('email').value;
+                            const subject = document.getElementById('subject').value;
+                            const message = document.getElementById('message').value;
+
+                            const phoneNumber = "62811962025"; // nomor WA tanpa tanda +
+                            const text = `Halo, saya ${name} (%0AEmail: ${email})%0A%0ASubject: ${subject}%0A%0APesan:%0A${message}`;
+
+                            const url = `https://wa.me/${phoneNumber}?text=${text}`;
+
+                            window.open(url, "_blank");
+                        }
+                    </script>
+
                 </div>
             </div>
         </div>
@@ -446,12 +427,17 @@
                     <p class="text-gray-400 mb-4">Premium car wash and detailing service with state-of-the-art
                         facilities.</p>
                     <div class="flex space-x-3">
-                        <a href="#"
-                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">f</a>
-                        <a href="#"
-                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">📷</a>
-                        <a href="#"
-                            class="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition">🐦</a>
+                         <a href="https://instagram.com/swoosh.carwash.cafe" target="_blank"
+                                class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                        d="M16.5 7.5h.01m-4.5 2.25a3.75 3.75 0 1 1-3.75 3.75 3.75 3.75 0 0 1 3.75-3.75z" />
+                                </svg>
+                                swoosh.carwash.caffe
+                            </a>
                     </div>
                 </div>
                 <div>

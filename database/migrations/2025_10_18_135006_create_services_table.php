@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->string('image_url')->nullable(); // URL gambar layanan
             $table->string('name');                   // nama layanan, misal "Cuci Mobil", "Waxing", "Interior Cleaning"
             $table->text('description')->nullable();  // deskripsi opsional
             $table->decimal('price', 15, 2); // harga layanan
