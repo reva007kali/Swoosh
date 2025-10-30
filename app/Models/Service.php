@@ -12,4 +12,5 @@ class Service extends Model
 
     protected $guarded = [];
 
+
 }

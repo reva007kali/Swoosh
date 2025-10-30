@@ -64,11 +64,11 @@
 
 <body class="antialiased font-sans bg-zinc-950 text-white">
 
-    <x-navbar></x-navbar>
+    @include('components.navbar')
 
 
 
-    <x-hero></x-hero>
+    @include('components.hero')
 
     <!-- Promotional Banner -->
     <section class="py-4 bg-gradient-to-r from-blue-600 to-blue-800">
@@ -80,9 +80,9 @@
         </div>
     </section>
 
-    <x-about></x-about>
+    @include('components.about')
 
-    <x-services></x-services>
+    @include('components.services')
 
 
     <!-- Cafe Section -->

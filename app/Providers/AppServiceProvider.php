@@ -24,12 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('*', function ($view) {
+        View::composer(['home','menu'], function ($view) {
             $view->with([
                 'services' => Service::all(),
                 'caffeMenus' => CaffeMenu::all(),
             ]);
         });
+
 
         FilamentColor::register([
             'danger' => Color::Red,
