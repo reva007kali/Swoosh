@@ -1,10 +1,14 @@
 {
+  "public/image/hero.png": {
+    "file": "assets/hero-B8iPQaMX.png",
+    "src": "public/image/hero.png"
+  },
   "public/image/hero2.png": {
     "file": "assets/hero2-5xEoFCXg.png",
     "src": "public/image/hero2.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-T7SZ1xID.css",
+    "file": "assets/app-QQ_8rEE8.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
@@ -12,9 +16,16 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Ca3wFJqI.js",
+    "file": "assets/app-4OS6UTZd.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/app-QQ_8rEE8.css"
+    ],
+    "assets": [
+      "assets/hero-B8iPQaMX.png",
+      "assets/hero2-5xEoFCXg.png"
+    ]
   }
 }
