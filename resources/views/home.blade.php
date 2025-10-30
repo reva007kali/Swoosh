@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Swoosh Carwash — Clean. Shine. Drive.</title>
+    <title>Swoosh Carwash — Cuci Mobil & Motor Nomor 1 Di Surabaya</title>
+    <meta name="description" content="Layanan cuci mobil dan motor profesional di Surabaya. Gratis semir ban, cepat, bersih, dan hemat. Booking online sekarang!">
 
     <link rel="icon" href="/image/swooshico.png" sizes="any">
 

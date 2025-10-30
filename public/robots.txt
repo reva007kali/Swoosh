@@ -1,2 +1,13 @@
+# robots.txt for swooshcarwash.com
+# Mengatur akses untuk mesin pencari
+
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /storage/
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Allow: /
+
+# Peta situs
+Sitemap: https://swooshcarwash.com/sitemap.xml
