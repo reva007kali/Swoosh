@@ -9,13 +9,13 @@
 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#hero" class="hover:text-blue-500 transition">Home</a>
-                    <a href="#about" class="hover:text-blue-500 transition">About</a>
-                    <a href="#services" class="hover:text-blue-500 transition">Services</a>
-                    <a href="#cafe" class="hover:text-blue-500 transition">Cafe</a>
-                    <a href="#facilities" class="hover:text-blue-500 transition">Facilities</a>
-                    <a href="#testimonials" class="hover:text-blue-500 transition">Testimonials</a>
-                    <a href="#contact" class="hover:text-blue-500 transition">Contact</a>
+                    <a href="/" class="hover:text-blue-500 transition">Home</a>
+                    <a href="/#about" class="hover:text-blue-500 transition">About</a>
+                    <a href="/#services" class="hover:text-blue-500 transition">Services</a>
+                    <a href="/#cafe" class="hover:text-blue-500 transition">Cafe</a>
+                    <a href="/#facilities" class="hover:text-blue-500 transition">Facilities</a>
+                    <a href="/#testimonials" class="hover:text-blue-500 transition">Testimonials</a>
+                    <a href="/#contact" class="hover:text-blue-500 transition">Contact</a>
                 </div>
 
                 <!-- Auth Buttons -->
@@ -34,13 +34,13 @@
 
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
-                <a href="#hero" class="block py-2 hover:text-blue-500 transition">Home</a>
-                <a href="#about" class="block py-2 hover:text-blue-500 transition">About</a>
-                <a href="#services" class="block py-2 hover:text-blue-500 transition">Services</a>
-                <a href="#cafe" class="block py-2 hover:text-blue-500 transition">Cafe</a>
-                <a href="#facilities" class="block py-2 hover:text-blue-500 transition">Facilities</a>
-                <a href="#testimonials" class="block py-2 hover:text-blue-500 transition">Testimonials</a>
-                <a href="#contact" class="block py-2 hover:text-blue-500 transition">Contact</a>
+                <a href="/" class="block py-2 hover:text-blue-500 transition">Home</a>
+                <a href="/#about" class="block py-2 hover:text-blue-500 transition">About</a>
+                <a href="/#services" class="block py-2 hover:text-blue-500 transition">Services</a>
+                <a href="/#cafe" class="block py-2 hover:text-blue-500 transition">Cafe</a>
+                <a href="/#facilities" class="block py-2 hover:text-blue-500 transition">Facilities</a>
+                <a href="/#testimonials" class="block py-2 hover:text-blue-500 transition">Testimonials</a>
+                <a href="/#contact" class="block py-2 hover:text-blue-500 transition">Contact</a>
                 <a href="/login"
                     class="w-full mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition">Login</a>
             </div>
